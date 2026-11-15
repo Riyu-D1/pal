@@ -30,7 +30,7 @@ heavy load; two options: (a) set `PA_ROUTER_ENABLED=true` with a
 second backend key (`GEMINI_API_KEY`, `OPENROUTER_API_KEY`,
 `CLOUDFLARE_*`, or nothing needed for Pollinations) and pal falls over
 automatically — `docs/ROUTER.md`; (b) lower `PA_CHAT_MAX_STEPS` /
-`PA_CHAT_DAILY_LLM_CALLS` quotas to pace usage.
+`PA_DAILY_REQUEST_LIMIT` / `PA_DAILY_TOKEN_LIMIT` quotas to pace usage.
 
 **`LLM_BASE_URL` refused** — config.py enforces an allowlist of
 public HTTPS providers + loopback/private hosts. A random endpoint
@@ -76,9 +76,11 @@ they work. Nothing else on the Mac path needs it.
 ## Data / backups
 
 **Restore test fails** — `docs/DR.md` is the runbook; the short
-version is `python -m pa backup` writes encrypted `.db.enc` snapshots
-into `PA_DATA_DIR/backups/` and restore needs the same
-`PA_SECRETS_KEY`/`PA_BACKUP_KEY` env that encrypted them.
+version is the `scheduled-backup` job / `python -m pa export-backup`
+write encrypted `.db.enc` snapshots (to `PA_BACKUP_DEST` or
+`PA_DATA_DIR/backups/`) and restore (`import-backup`) needs the same
+`PA_BACKUP_PASSPHRASE` that encrypted them. Plain `python -m pa backup`
+is an unencrypted online SQLite copy.
 
 **`needs config` on an integration you set** — env var name typo is
 the #1 cause; cross-check spelling in `docs/CONFIG.md` /

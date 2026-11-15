@@ -4,8 +4,7 @@ The phone node reaches pal over a **reverse SSH tunnel**: the phone
 dials out (NAT/mobile-data friendly, no inbound port), pal connects to
 `127.0.0.1:8791` on the VM.
 
-These steps run **on the pal VM as root** (the parent agent applies
-them after the owner approves — Devin never touches the VM).
+These steps run **on the pal VM as root**.
 
 ## 1. Locked-down tunnel user
 
@@ -45,7 +44,7 @@ PA_NODES=phone=http://127.0.0.1:8791
 PA_NODE_PHONE_TOKEN=<shared bearer — matches ~/.pa-node/token on the phone>
 ```
 
-The token lives only in `~/.pa/env` on the VM and `~/.pa-node/token`
+The token lives only in pal's `.env` on the VM and `~/.pa-node/token`
 on the phone — never in the repo, never in logs.
 
 ## Notes

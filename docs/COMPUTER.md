@@ -61,7 +61,7 @@ starts and stops per task.
    `sudo -u pa-browser -i XDG_RUNTIME_DIR=/run/user/$(id -u pa-browser) systemctl --user enable --now pa-computer-agent`
    (`loginctl enable-linger pa-browser` — already done by the
    installer — keeps it alive after logout.)
-5. **Point pal at it.** On the pal VM, add to `~/.pa/env`:
+5. **Point pal at it.** On the pal VM, add to pal's `.env`:
    ```
    PA_COMPUTER_ENABLED=true
    PA_COMPUTER_URL=http://100.64.1.5:8788

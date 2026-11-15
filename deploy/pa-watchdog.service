@@ -12,9 +12,10 @@ After=pa.service
 
 [Service]
 Type=simple
-EnvironmentFile=%h/.pa/env
-ExecStart=/usr/bin/env python3 -m pa watchdog
-WorkingDirectory=%h/pa
+# adjust if your checkout isn't ~/pal (docs/DEPLOY.md layout)
+EnvironmentFile=%h/pal/.env
+ExecStart=%h/pal/.venv/bin/python -m pa watchdog
+WorkingDirectory=%h/pal
 Restart=always
 RestartSec=10
 MemoryMax=128M

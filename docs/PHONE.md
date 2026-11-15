@@ -1,11 +1,12 @@
-# Phone node — Motorola Moto E5 (Termux)
+# Phone node — Android + Termux (example: Moto E5)
 
 pal's phone hand: a **stdlib-only** Python agent (`pa/node_agent.py`)
-running under Termux on the Moto E5, reached over a reverse SSH
+running under Termux on any Android phone (the worked example below
+is an old Moto E5), reached over a reverse SSH
 tunnel (see `deploy/pa-node/VM-TUNNEL.md`). One bearer token, a fixed
 capability allowlist — no shell, no inbound port on the phone.
 
-## Hardware reality
+## Hardware reality (example device)
 
 Moto E5 (2018): Snapdragon 425, 2 GB RAM, Android 8.0, 32-bit armv7.
 Termux (F-Droid) + Termux:API + Termux:Boot.

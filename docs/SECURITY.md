@@ -78,7 +78,7 @@ when Tailscale is down — no quick tunnel, no Funnel, no public bind.
 Its VNC password is a per-session token DMed to the owner; expiry
 (PA_DESKTOP_MINUTES, ≤120) or `/desktop off` kills the whole process
 tree and the token with it; the profile dir stays chmod 700 under a
-dedicated `pa-browser` user that cannot read pal's `~/.pa/env`.
+dedicated `pa-browser` user that cannot read pal's pal's `.env`.
 Form-submit/login/checkout/identity-shaped elements, uploads,
 oversized downloads, and every write-like browser action in unattended
 jobs go through the existing Discord approval — no second gate, no

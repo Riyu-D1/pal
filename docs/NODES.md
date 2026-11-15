@@ -1,7 +1,7 @@
 # X1/X2/X4 — Nodes: pal's remote hands
 
 A node is a small HTTP agent running on hardware pal owns — the
-Moto E5 phone (Termux), the computer VM, or any Linux box. Pal
+an Android phone (Termux — e.g. the Moto E5 in `docs/PHONE.md`), the computer VM, or any Linux box. Pal
 dispatches capability jobs to nodes through `pa/nodes.py`; every job
 is policy-classified and budget-charged before it leaves the pal VM.
 

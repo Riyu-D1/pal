@@ -1,5 +1,5 @@
 # Optional voice-call extras — ONLY needed for call_owner / /call.
-# Install on the VM: ~/.pa/venv/bin/pip install -r requirements-voice.txt
+# Install on the VM: .venv/bin/pip install -r requirements-voice.txt
 #
 # discord.py[voice] drives the Discord voice gateway + UDP + Opus;
 # davey supplies the DAVE end-to-end encryption Discord now requires

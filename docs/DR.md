@@ -5,7 +5,7 @@ to `PA_BACKUP_DEST` (or `<PA_DATA_DIR>/backups/pa-<stamp>.db.enc`). With
 `PA_BACKUP_OFFSITE=gdrive@pal` a copy also lands in pal's own Google
 Drive (pal's account, not the owner's — no approval needed).
 
-**The backup passphrase is yours.** It lives in `~/.pa/env` as
+**The backup passphrase is yours.** It lives in pal's `.env` as
 `PA_BACKUP_PASSPHRASE` on the VM and nowhere in the repo. If you lose
 it, the `.enc` files are unrecoverable — keep an offline copy
 (password manager). Never paste it into Discord, logs, or tickets.
@@ -38,7 +38,7 @@ pal itself is unaffected — `browse_*`/computer tools answer
 
 1. Rebuild an Ubuntu micro.
 2. `PA_COMPUTER_TOKEN` rotate first (it's pal↔computer auth): generate
-   a new token, put it in `~/.pa/env` on BOTH boxes, restart pal.
+   a new token, put it in pal's `.env` on BOTH boxes, restart pal.
 3. Install the computer agent per `docs/COMPUTER.md`
    (`deploy/computer/` has the unit + installer).
 4. `/nodes` in Discord should list `computer` online again.
@@ -57,16 +57,16 @@ pal itself is unaffected — `browse_*`/computer tools answer
 ## (d) Discord bot token leaked
 
 1. Discord Developer Portal → Bot → **Reset Token** (instant revoke).
-2. New token into `~/.pa/env` (`DISCORD_BOT_TOKEN=`) on the VM,
+2. New token into pal's `.env` (`DISCORD_BOT_TOKEN=`) on the VM,
    `systemctl --user restart pa`.
-3. Rotate `PA_WEB_TOKEN`/`PA_COMPUTER_TOKEN` too if the leak vector is
+3. Rotate `PA_COMPUTER_TOKEN`/`PA_NODE_<NAME>_TOKEN` too if the leak vector is
    unclear (they lived in the same env file).
-4. Skim `pa audit` / the audit table for actions you didn't approve.
+4. Skim `/audit` in Discord for actions you didn't approve.
 
 ## (e) LLM/other API key leaked (Groq, Gemini, OpenRouter, Composio, Cloudflare)
 
 1. Revoke the key at the provider console; issue a new one.
-2. Update the name in `~/.pa/env`, restart `pa.service`.
+2. Update the name in pal's `.env`, restart `pa.service`.
 3. `python -m pa provider-check` to confirm the router is healthy.
 
 ## (f) DB corrupt

@@ -17,7 +17,7 @@
 #   2. Tailscale from the official repo (does NOT `tailscale up` —
 #      that's interactive; instructions print at the end).
 #   3. A dedicated `pa-browser` user (nologin; cannot read pal's
-#      ~/.pa/env — unix 0700 does that, the unit adds ProtectHome).
+#      .env — unix 0700 does that, the unit adds ProtectHome).
 #   4. The repo at /opt/pa-computer + a venv with
 #      requirements-computer.txt + `playwright install chromium`.
 #   5. ~/.pa-computer/env with a generated PA_COMPUTER_TOKEN (kept on
@@ -135,7 +135,7 @@ Done. Next steps (docs/COMPUTER.md has the full walkthrough):
   3. sudo -u $BROWSER_USER -i \\
        XDG_RUNTIME_DIR=/run/user/\$(id -u $BROWSER_USER) \\
        systemctl --user enable --now pa-computer-agent
-  4. On the PAL host, set in ~/.pa/env:
+  4. On the PAL host, set in pal's .env:
        PA_COMPUTER_ENABLED=true
        PA_COMPUTER_URL=http://<tailnet-ip>:8788
        PA_COMPUTER_TOKEN=<same token as $ENVFILE>

@@ -283,9 +283,9 @@ feature stays off until you set it.
 | `PA_EVOLVE_DETECT_THRESHOLD` | *(unset)* | fingerprint hits in 24h -> an item |
 | `PA_EVOLVE_DETECT_MAX_ITEMS` | *(unset)* | new items opened per detect run |
 | `PA_EVOLVE_HEALTH_SECONDS` | *(unset)* | canary health window after deploy |
-| `PA_EVOLVE_ARCHIVE` | *(unset)* | final-4: versioned improvement |
-| `PA_EVOLVE_PRACTICE` | *(unset)* | final-4: nightly owner-approved |
-| `PA_BACKUP_OFFSITE` | *(unset)* | final-4: 'gdrive@pal' copies each |
+| `PA_EVOLVE_ARCHIVE` | *(unset)* | versioned improvement archive (docs/EVOLVE.md) |
+| `PA_EVOLVE_PRACTICE` | *(unset)* | nightly owner-approved self-practice |
+| `PA_BACKUP_OFFSITE` | *(unset)* | 'gdrive@pal' copies each encrypted backup to pal's own Drive |
 
 ## deep /healthz (docs/EVOLVE.md item 3)
 

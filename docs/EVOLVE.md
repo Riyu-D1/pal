@@ -1,7 +1,6 @@
 # pal evolve — self-healing, self-improving loop
 
-Branch `feature/evolve` on top of `feature/parity`. Discord stays the
-only chat interface; every approval surface is a Discord DM card or a
+Discord stays the only chat interface; every approval surface is a Discord DM card or a
 slash command. Nothing here merges or deploys pal's own code without an
 owner approval.
 

@@ -23,7 +23,14 @@ journalctl -u pa -f
 ```
 
 `deploy/pa.service` runs as your user, loopback-only, restarts on
-failure. Upgrades: `deploy/rebuild.sh` (pull + pip install + restart +
+failure.
+
+> **Watchdog and `/update` restart pal with `systemctl --user restart pa`.**
+> They only work if pal runs as a *user* unit named `pa`: copy the unit to
+> `~/.config/systemd/user/pa.service` instead, drop the `User=` line, use
+> `%h/pal/...` paths and `WantedBy=default.target`, then
+> `systemctl --user enable --now pa` and `sudo loginctl enable-linger $USER`.
+> `deploy/pa-watchdog.service` is already a user unit. Upgrades: `deploy/rebuild.sh` (pull + pip install + restart +
 health gate + auto-rollback) — point it at your checkout path.
 
 ### Backups
@@ -80,6 +87,7 @@ outside that marker it refuses non-loopback binds.
 
 ```sh
 PA_ENV=development PA_DATA_DIR=./data scripts/setup.sh
+. .venv/bin/activate && set -a && . ./.env && set +a
 python -m pa serve
 ```
 

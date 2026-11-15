@@ -57,7 +57,8 @@ Sensible extras, all optional: `PA_SECRETS_KEY`
 ## 4. Initialise + verify
 
 ```sh
-set -a; . ./.env; set +a
+. .venv/bin/activate          # or: python3 -m venv .venv && pip install -r requirements.txt
+set -a; . ./.env; set +a      # pal never reads .env itself
 python -m pa migrate        # creates ./data/pa.db, runs all migrations
 python -m pa doctor         # required checks must all pass
 python -m pa create-owner   # pick web-UI username + password
@@ -74,14 +75,14 @@ shows the dashboard, integrations panel, and pending approvals.
 |---|---|---|
 | Gmail read/draft/send | `GMAIL_CLIENT_ID/SECRET/REFRESH_TOKEN` (GCP OAuth desktop client) or `/connect google` | `docs/INTEGRATIONS.md` |
 | Google Calendar | same Google OAuth (add calendar scope) | `docs/INTEGRATIONS.md` |
-| Connections library (`/connect <app>`) | `PA_SECRETS_KEY` + `PA_PUBLIC_URL` + `COMPOSIO_API_KEY` and/or `PA_MCP_URL` | `docs/CONNECTIONS.md` |
-| Notes mirror (Obsidian) | `VAULT_PATH`, `PA_VAULT_MODE` | `docs/INTEGRATIONS.md` |
+| Connections library (`/connect <app>`) | `PA_SECRETS_KEY` + `PA_PUBLIC_URL` + `COMPOSIO_API_KEY` (optional; remote MCP servers need no key: `/connect url:<https://…>`) | `docs/CONNECTIONS.md` |
+| Notes mirror (Obsidian) | `VAULT_PATH` (+ `VAULT_GIT_SYNC`) | `docs/INTEGRATIONS.md` |
 | Web search | `TAVILY_API_KEY` (keyless DDG fallback exists) | `docs/CONFIG.md` |
 | Voice notes TTS | `FISH_API_KEY` or Edge TTS (free, no key) | `docs/VOICE.md` |
-| Discord voice calls | `PA_DISCORD_VOICE_CALLS=true` + PyNaCl | `docs/VOICE.md` |
+| Discord voice calls | `PA_CALL_GUILD_ID` + `requirements-voice.txt` | `docs/VOICE.md` |
 | Free-API router | `PA_ROUTER_ENABLED` + backend keys | `docs/ROUTER.md` |
 | pal's computer (Chromium) | `PA_COMPUTER_*` | `docs/COMPUTER.md` |
-| Phone node | `PA_NODE_TOKEN`, deploy/node kit | `docs/PHONE.md` |
+| Phone node | `PA_NODES` + `PA_NODE_<NAME>_TOKEN`, `deploy/pa-node/` kit | `docs/PHONE.md` |
 | Self-evolve loop | `PA_EVOLVE_*` (all off) | `docs/EVOLVE.md` |
 | Owner email | `PA_OWNER_EMAIL` | `docs/CONFIG.md` |
 | Home/weather context | `PA_HOME_LAT/LON`, `PA_BRIEFING_CITY` | `docs/CONFIG.md` |

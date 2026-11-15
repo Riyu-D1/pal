@@ -57,8 +57,12 @@ LLM_BASE_URL=… LLM_MODEL=… LLM_API_KEY=… \
   scripts/setup.sh --non-interactive
 #    (interactive `scripts/setup.sh` prompts for the same three values)
 
-# 3. verify — all FAIL lines must be green:
-python -m pa doctor        # via .venv/bin/python if not activated
+# 3. load the venv + .env into THIS shell — pal never reads .env by
+#    itself (systemd uses EnvironmentFile=, compose uses env_file:):
+. .venv/bin/activate && set -a && . ./.env && set +a
+
+#    verify — all FAIL lines must be green:
+python -m pa doctor
 
 # 4. create the web-UI owner account (human picks username+password —
 #    ask them to run it, or run it for them interactively):

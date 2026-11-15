@@ -7,3 +7,9 @@ data/
 *.db-shm
 *.egg-info/
 .venv/
+.env.*
+!.env.example
+*.enc
+backups/
+fly.toml
+.DS_Store

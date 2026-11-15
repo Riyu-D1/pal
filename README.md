@@ -86,6 +86,7 @@ scheduler + Discord bot; one volume holds all state.
 ```sh
 git clone https://github.com/Riyu-D1/pal.git && cd pal
 scripts/setup.sh                 # venv + deps + writes .env (asks 3 values)
+. .venv/bin/activate && set -a && . ./.env && set +a   # pal doesn't auto-load .env
 python -m pa create-owner        # web-UI login (username + password)
 python -m pa serve               # http://127.0.0.1:8080 + Discord bot
 curl http://127.0.0.1:8080/healthz
@@ -99,6 +100,7 @@ Groq key works). Give it env vars instead of typing:
 DISCORD_BOT_TOKEN=… DISCORD_OWNER_ID=… \
 LLM_BASE_URL=https://api.groq.com/openai/v1 LLM_MODEL=llama-3.3-70b-versatile \
 LLM_API_KEY=… scripts/setup.sh --non-interactive
+. .venv/bin/activate && set -a && . ./.env && set +a
 python -m pa doctor              # what's configured / what's missing
 ```
 
@@ -139,6 +141,8 @@ voice extras, nodes, computer, router backends. See `docs/SETUP.md`
 and `docs/CONFIG.md`.
 
 ## Docs
+
+Full index: [`docs/README.md`](docs/README.md).
 
 - **`AGENTS.md`** — hand this to your AI agent; it drives the whole
   setup end-to-end.
