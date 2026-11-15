@@ -1,4 +1,4 @@
-"""Provenance + poisoning defences (final-4 E5).
+"""Provenance + poisoning defences.
 
 Every memory/fact/block/skill/KG edge carries source
 (owner|pal|email|web|file|import) + source_ref (migration 42).

@@ -1,4 +1,4 @@
-"""Disaster-recovery drill (final-4 R1): `python -m pa dr-check`.
+"""Disaster-recovery drill: `python -m pa dr-check`.
 
 Read-only. Verifies the backup story end-to-end on the live box and
 prints a green/red table. It never prints secret VALUES — only which
@@ -150,7 +150,7 @@ def run(s, env=None, conn=None) -> dict:
         free_mb = shutil.disk_usage(s.data_dir).free / 1e6
         rows.append(_row("disk free", free_mb >= MIN_FREE_MB,
                          f"{free_mb:.0f} MB"))
-        # A7: last offsite copy result, persisted by backupjob — a
+        # last offsite copy result, persisted by backupjob — a
         # configured-but-never-copied (or failed) target is red; an
         # unconfigured one is a skip row, not a failure.
         target = (env.get("PA_BACKUP_OFFSITE") or "").strip()

@@ -1,4 +1,4 @@
-"""final-2 M4: personal knowledge graph over the vault (PA_KG).
+"""personal knowledge graph over the vault (PA_KG).
 
 Deterministic extraction first (free): [[wikilinks]], #tags and
 frontmatter key: value lines become typed entities + edges. A

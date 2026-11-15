@@ -6,7 +6,7 @@ under the chat sandbox. What reaches the model is always a fenced
 untrusted block — never raw instructions:
 
 - Images: saved locally; the turn sees "[Attached image: name — WxH]"
-  plus a vision caption when PA_VISION is configured (item 4), else a
+  plus a vision caption when PA_VISION is configured, else a
   plain "can't see it yet" note. Bytes never go near the importer.
 - PDFs: text pulled with pypdf (pinned pure-Python dep), capped at
   PA_PDF_MAX_PAGES pages / PA_PDF_MAX_CHARS chars and fenced as

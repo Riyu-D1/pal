@@ -1,4 +1,4 @@
-"""final-4 E1: the improvement archive (Darwin-Gödel-Machine style).
+"""the improvement archive (Darwin-Gödel-Machine style).
 
 Every change to an evolvable thing — a skill, a prompt snippet, a
 config kind, a made tool, a memory block — lands as a *variant* row
@@ -231,7 +231,7 @@ def reject(conn, vid, reasons, score=None, eval_hash: str = ""):
 
 
 def flag(conn, vid, key: str, value=True):
-    """Mark a candidate for the owner (e.g. E3 reject reasons /
+    """Mark a candidate for the owner (e.g. reject reasons /
     suspicious score jump) without promoting or deleting it."""
     row = get(conn, vid)
     if row is None:

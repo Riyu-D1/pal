@@ -1,4 +1,4 @@
-"""final-2 N1: one notifier (PA_NOTIFY_V2).
+"""one notifier (PA_NOTIFY_V2).
 
 notify() is the single place every outbound DM should pass through:
 - urgent | high go out immediately (urgent callers still use the
@@ -99,7 +99,7 @@ def _send_now(bot, text):
     bot.api.post_message(dm, text[:1900])
     if bot._voice is not None:
         try:
-            # final-6: proactive voice obeys the same rule as replies —
+            # proactive voice obeys the same rule as replies
             # voice_notes 'on' always, 'off' never, 'auto' when busy
             from . import busy as busymod
             if busymod.voice_should_send(bot):
@@ -110,7 +110,7 @@ def _send_now(bot, text):
 
 
 def _phone_ping(bot, conn, priority: str, text: str) -> None:
-    """A2 outbound: PA_NOTIFY_PHONE + a healthy phone node -> the same
+    """outbound: PA_NOTIFY_PHONE + a healthy phone node -> the same
     alert also reaches the phone's `notify` cap (and `vibrate` for
     urgent). Fire-and-forget — failures are logged, never block the
     Discord path. Held/deduped items never reach here, so quiet hours

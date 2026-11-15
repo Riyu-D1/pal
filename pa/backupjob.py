@@ -64,7 +64,7 @@ def run(bot, payload: dict) -> str:
         conn = bot._db()
         try:
             res = offsite.copy(path, conn, s, env)
-            # A7: persist the last outcome for dr-check's status row
+            # persist the last outcome for dr-check's status row
             import json as _json
             from . import db as dbmod
             from .util import now_iso

@@ -1,4 +1,4 @@
-"""A3: coursework layer — runtime toolkit detection, deadline watch,
+"""coursework layer — runtime toolkit detection, deadline watch
 write gating, PDF -> vault notes."""
 
 import datetime

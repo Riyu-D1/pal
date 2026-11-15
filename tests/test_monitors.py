@@ -1,4 +1,4 @@
-"""Item 8: standing monitors (watch_*) + calendar-soon alerts."""
+"""standing monitors (watch_*) + calendar-soon alerts."""
 
 import datetime
 import unittest

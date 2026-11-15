@@ -139,7 +139,7 @@ class TestParsing(unittest.TestCase):
 class TestDelivery(unittest.TestCase):
     def setUp(self):
         # PA_VOICE_NOTES -> mode 'on': the reminder voice note must land
-        # (final-6 'auto' would stay text-only while not busy)
+        # ('auto' would stay text-only while not busy)
         self.env = TmpEnv(DISCORD_OWNER_ID="o1", PA_VOICE_NOTES="true")
         self.env.conn().close()
         self.bot = discordbot.DiscordBot(

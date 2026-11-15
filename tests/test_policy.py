@@ -1,4 +1,4 @@
-"""final-1 P2/P3 — action classifier + decision floor."""
+"""Action classifier + decision floor."""
 import tempfile
 import unittest
 
@@ -250,7 +250,7 @@ class TestRunWiring(Case):
         assert out.get("error") == "not_approved"
 
 class TestRedTeamEvals(Case):
-    """P5: the six hostile-path cases — all must pass in CI."""
+    """the six hostile-path cases — all must pass in CI."""
 
     def _ctx(self, unattended=False):
         return chattools.ChatToolContext(

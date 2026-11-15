@@ -1,4 +1,4 @@
-"""Evolve item 15: the router 'escalate' tier."""
+"""the router 'escalate' tier."""
 
 import unittest
 

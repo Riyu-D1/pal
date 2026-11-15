@@ -1,4 +1,4 @@
-"""V5 streaming call brain (pa/callbrain.py).
+"""streaming call brain (pa/callbrain.py).
 
 The pipeline fallback's think path: instead of running the full chat
 agent (64 tool schemas, ~17k prompt chars, non-streaming ReAct), a

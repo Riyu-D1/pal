@@ -1,4 +1,4 @@
-"""final-2 T1: inbox triage (PA_TRIAGE).
+"""inbox triage (PA_TRIAGE).
 
 Every inbox-watch run labels each new mail into a pal-DB-only bucket
 — reply-needed | fyi | newsletter | receipt | spam-ish — in the

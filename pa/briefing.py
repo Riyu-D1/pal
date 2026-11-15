@@ -179,7 +179,7 @@ def _weather(s) -> str:
 
 
 def _goals(bot, conn):
-    """final-2 G5: the Goals section — progress since yesterday,
+    """the Goals section — progress since yesterday
     blockers and pal's next action. Read-only; needs PA_GOALS +
     PA_BRIEFING_GOALS."""
     if not (getattr(bot.s, "goals", False)

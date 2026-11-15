@@ -1,4 +1,4 @@
-"""final-6: is the owner busy? — the voice_notes 'auto' trigger.
+"""is the owner busy? — the voice_notes 'auto' trigger.
 
 voice_notes gained a third mode: 'on' speaks every reply, 'off'
 never, and 'auto' (the new default when the setting is unset)
@@ -224,7 +224,7 @@ def mode(bot) -> str:
 
 
 def voice_should_send(bot) -> bool:
-    """The one gate every voice-note send goes through (final-6):
+    """The one gate every voice-note send goes through:
     'on' -> always, 'off' -> never, 'auto' -> owner busy only."""
     m = mode(bot)
     if m == "on":

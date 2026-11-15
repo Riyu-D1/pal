@@ -1,4 +1,4 @@
-"""final-2 M3: cross-source recall — FTS5 over chat turns, memories,
+"""cross-source recall — FTS5 over chat turns, memories
 owner facts, activity and vault excerpts; incremental manifest;
 ranked mixed-source hits that cite source+date."""
 

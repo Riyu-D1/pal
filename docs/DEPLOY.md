@@ -10,28 +10,39 @@ On an Oracle Always Free instance, home box, Pi — any always-on Linux:
 
 ```sh
 git clone <repo> ~/pal && cd ~/pal
-scripts/setup.sh --non-interactive   # or export env first; see .env
-# create-owner prompts for the web login — run once:
-.venv/bin/python -m pa create-owner
+scripts/setup.sh --non-interactive   # or fill .env yourself first
+.venv/bin/python -m pa create-owner  # web login — run once
 
-sudo cp deploy/pa.service /etc/systemd/system/
-sudoedit /etc/systemd/system/pa.service   # fix User=, ExecStart path,
-                                        # EnvironmentFile=/home/you/pal/.env
-sudo systemctl enable --now pa
+# user unit (documented default): pal's watchdog and the /update
+# command restart `systemctl --user restart pa` — zero extra config.
+mkdir -p ~/.config/systemd/user
+cp deploy/pa-user.service ~/.config/systemd/user/pa.service
+# edit paths inside if your checkout isn't ~/pal
+systemctl --user daemon-reload && systemctl --user enable --now pa
+sudo loginctl enable-linger $USER    # keeps it running while logged out
 curl http://127.0.0.1:8080/healthz
-journalctl -u pa -f
+journalctl --user -u pa -f
+
+# optional watchdog — one restart + one owner DM per outage window:
+cp deploy/pa-watchdog.service ~/.config/systemd/user/
+systemctl --user enable --now pa-watchdog
 ```
 
-`deploy/pa.service` runs as your user, loopback-only, restarts on
-failure.
+### System unit alternative
 
-> **Watchdog and `/update` restart pal with `systemctl --user restart pa`.**
-> They only work if pal runs as a *user* unit named `pa`: copy the unit to
-> `~/.config/systemd/user/pa.service` instead, drop the `User=` line, use
-> `%h/pal/...` paths and `WantedBy=default.target`, then
-> `systemctl --user enable --now pa` and `sudo loginctl enable-linger $USER`.
-> `deploy/pa-watchdog.service` is already a user unit. Upgrades: `deploy/rebuild.sh` (pull + pip install + restart +
-health gate + auto-rollback) — point it at your checkout path.
+`deploy/pa.service` runs pal under system systemd instead (dedicated
+`pal` account, stronger sandboxing): `sudo cp` it to
+`/etc/systemd/system/`, fix `User=`/paths/`EnvironmentFile=`, then
+`sudo systemctl enable --now pa`. In that scope set
+**`PA_SYSTEMD_SCOPE=system`** in `.env` so the watchdog and `/update`
+call `systemctl restart pa` (`PA_SYSTEMD_UNIT` renames the unit). The
+watchdog must then run as a system unit too — install
+`deploy/pa-watchdog-system.service` to
+`/etc/systemd/system/pa-watchdog.service` (a user unit cannot restart
+system units).
+
+Upgrades: `deploy/rebuild.sh` (pull + pip install + restart + health
+gate + auto-rollback) — point it at your checkout path.
 
 ### Backups
 
@@ -87,7 +98,7 @@ outside that marker it refuses non-loopback binds.
 
 ```sh
 PA_ENV=development PA_DATA_DIR=./data scripts/setup.sh
-. .venv/bin/activate && set -a && . ./.env && set +a
+. .venv/bin/activate          # pal reads ./.env itself
 python -m pa serve
 ```
 

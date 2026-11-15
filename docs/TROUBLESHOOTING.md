@@ -84,8 +84,8 @@ is an unencrypted online SQLite copy.
 
 **`needs config` on an integration you set** — env var name typo is
 the #1 cause; cross-check spelling in `docs/CONFIG.md` /
-`.env.example` and confirm you exported it into the same shell
-(`set -a; . ./.env; set +a`) the service runs under.
+`.env.example` and confirm the var is in the `.env` the service's
+working dir reads (or exported / `PA_ENV_FILE` points at it).
 
 ## Tests
 

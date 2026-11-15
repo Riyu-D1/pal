@@ -1,4 +1,4 @@
-"""Item 11: auto-review labels on approval cards."""
+"""auto-review labels on approval cards."""
 
 import unittest
 

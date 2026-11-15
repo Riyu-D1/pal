@@ -1,4 +1,4 @@
-"""Anti-gaming checks (final-4 E3).
+"""Anti-gaming checks.
 
 The Darwin-Gödel-Machine failure mode — score that looks better
 because the tests were weakened, not the system — gets rejected

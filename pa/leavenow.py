@@ -1,5 +1,5 @@
-"""A5: "leave now" alerts — TfL journey planner + calendar locations
-(final-5, PA_LEAVE_NOW, default off).
+""""leave now" alerts — TfL journey planner + calendar locations
+(PA_LEAVE_NOW, default off).
 
 Runs inside the 'cal-triage' tick: for each upcoming event that has a
 location we plan a journey with the free TfL Journey Planner API and

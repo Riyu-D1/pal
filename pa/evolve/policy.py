@@ -11,12 +11,12 @@ import posixpath
 # exact files (safety-critical modules + this policy itself)
 PROTECTED_FILES = frozenset({
     "pa/approvals.py", "pa/allowrules.py", "pa/review.py",
-    "pa/policy.py",                       # final-1 P3: the action floor
+    "pa/policy.py",                       # the action floor
     "pa/vault.py", "pa/credvault.py", "pa/secretsbox.py",
     "pa/passwords.py", "pa/egress.py", "pa/untrusted.py",
     "pa/discordbot.py", "pa/webapp.py",   # owner gating + auth/CSRF
     "pa/evolve/policy.py",
-    "pa/evolve/evaluator.py",             # final-4 E2: the scorer itself
+    "pa/evolve/evaluator.py",             # the scorer itself
 })
 
 # whole trees — CI config, deploy units, secret material
@@ -24,7 +24,7 @@ PROTECTED_PREFIXES = (
     ".github/workflows/",
     "deploy/",              # units that bind/expose ports
     ".env",
-    "evals/",               # final-4 E2: scoring fixtures are frozen
+    "evals/",               # scoring fixtures are frozen
 )
 
 

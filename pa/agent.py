@@ -294,7 +294,7 @@ class AgentRunner:
                                      owner_facts, ledger, deadline_mono)
 
         tools = ctx.schemas()
-        # sub-agent tasks carry their own caps (S1): tool_calls and
+        # sub-agent tasks carry their own caps: tool_calls and
         # tokens are enforced here; minutes became the task deadline
         sub_caps = {}
         try:

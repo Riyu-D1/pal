@@ -1,4 +1,4 @@
-"""Item 22: code_task — queue a coding task on the freebuff agent."""
+"""code_task — queue a coding task on the freebuff agent."""
 
 import unittest
 

@@ -13,6 +13,18 @@ Commands:
   import-backup    decrypt an export and restore it
   self-update      report (default/--dry-run) or pull (--apply) the
                    upstream branch — same gate as /update in Discord
+  eval             run the offline eval fixtures (--live, --ids a,b);
+                   non-zero on any failure/regression
+  dr-check         disaster-recovery drill: backup age, decryption,
+                   test-restore, schema, env names, units, disk
+                   (docs/DR.md); non-zero on red
+  github-webhook   create the signed 'github' webhook endpoint, print
+                   the payload URL + one-time signing secret
+                   (docs/WEBHOOKS.md)
+  watchdog         standalone supervisor process: probes /healthz,
+                   restarts the systemd unit when pal stays sick,
+                   one owner DM per outage window
+                   (deploy/pa-watchdog.service)
   check-config     print non-secret config + bind check
   doctor           setup health report: what's configured, what's
                    missing, one-line fix hints (never prints secrets)
@@ -596,7 +608,7 @@ def cmd_call_diag(s, args):
 
 
 def cmd_call_bench(s, args):
-    """V8: N synthetic prompts through Live + pipeline, printing
+    """N synthetic prompts through Live + pipeline, printing
     first-audio/total p50/p90 per engine. Rows land in call_metrics
     with engine='bench'."""
     from . import callbench
@@ -615,6 +627,8 @@ USAGE = __doc__
 
 
 def main(argv=None):
+    from . import envfile
+    envfile.load()
     setup_logging()
     argv = list(sys.argv[1:] if argv is None else argv)
     if not argv or argv[0] in ("-h", "--help", "help"):
@@ -761,11 +775,11 @@ def cmd_self_update(s, args):
     fetch) — --apply does the fast-forward merge."""
     from . import selfupdate
     if "--apply" in args:
-        out = selfupdate.apply()
+        out = selfupdate.apply(settings=s)
         print(out.get("message") or out)
         if out.get("ok"):
             print(selfupdate.describe(selfupdate.plan()))
-            try:                       # E2: re-pin evaluator manifest
+            try:                       # re-pin evaluator manifest
                 conn = dbmod.connect(s.db_path) \
                     if hasattr(dbmod, "connect") else dbmod.open_db(
                         s.db_path)

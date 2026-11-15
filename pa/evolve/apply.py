@@ -171,7 +171,7 @@ def _candidate_content(kind, kw):
 
 def _promotion_score(ev) -> float:
     """What a candidate must match-or-beat — the held-out score when
-    the pinned set carries one (E2), else the fixture score."""
+    the pinned set carries one, else the fixture score."""
     h = ev.get("heldout_score")
     if h is not None:
         return float(h)
@@ -202,7 +202,7 @@ def _live_content(conn, kind, kw):
 
 
 def _maybe_apply_archive(conn, s, item, targets, bot) -> str:
-    """E1 Track A under PA_EVOLVE_ARCHIVE: score live on the pinned
+    """Track A under PA_EVOLVE_ARCHIVE: score live on the pinned
     set, write the change as candidate variants, apply, re-score —
     promote only when the candidate is all-green, at least as good as
     live, and healthy. Otherwise the store rolls back and the scored

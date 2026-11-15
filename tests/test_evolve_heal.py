@@ -1,4 +1,4 @@
-"""Evolve item 12: self-heal -> approval-gated code_task."""
+"""self-heal -> approval-gated code_task."""
 
 import json
 import unittest

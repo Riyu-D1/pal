@@ -1,4 +1,4 @@
-"""V8: python -m pa call-bench — owner-run call-latency benchmark.
+"""python -m pa call-bench — owner-run call-latency benchmark.
 
 N synthetic prompts through each engine, measuring what the owner
 hears: time to first audio (Live: first model PCM chunk lands in the

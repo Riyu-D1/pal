@@ -1,4 +1,4 @@
-"""Item 20: delegate + result wake-up into the chat thread."""
+"""delegate + result wake-up into the chat thread."""
 
 import unittest
 

@@ -1,4 +1,4 @@
-"""Item 26: Telegram mirror — off by default."""
+"""Telegram mirror — off by default."""
 
 import unittest
 from unittest import mock

@@ -1,4 +1,4 @@
-"""Protected evaluator (final-4 E2).
+"""Protected evaluator.
 
 The scoring core lives here, inside PROTECTED_FILES territory —
 pal's own change paths can never modify it at runtime. Scores are

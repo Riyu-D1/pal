@@ -208,6 +208,65 @@ class TestNoOwnerConfigured(unittest.TestCase):
         t.join(timeout=5)
 
 
+class TestAuthFailure(unittest.TestCase):
+    """A rejected token must say so in one line — not just retry."""
+
+    def _bot(self, gw, fx, token="fake-bot-token"):
+        env = TmpEnv(DISCORD_BOT_TOKEN=token,
+                     DISCORD_API_BASE=fx.web_base,
+                     DISCORD_GATEWAY_URL=gw.url)
+        return env, discordbot.DiscordBot(
+            env.settings, env=env.env, notifier=False)
+
+    def test_close_4004_logs_token_line(self):
+        gw = FakeGateway()
+        fx = Fixture()
+        env, bot = self._bot(gw, fx)
+
+        def script(g):
+            g.send({"op": 10, "d": {"heartbeat_interval": 30000}})
+            g.recv()
+            g.close(4004)              # Discord 'authentication failed'
+
+        gw.scripts.append(script)
+        with self.assertLogs("pa.discord", level="ERROR") as cm:
+            t = threading.Thread(target=bot.run_forever, daemon=True)
+            t.start()
+            wait_for(lambda: any("Discord token rejected" in m
+                                 for m in cm.output), timeout=10)
+        bot.stop()
+        gw.close()
+        fx.close()
+        t.join(timeout=5)
+        self.assertTrue(any(
+            "Discord token rejected (401) — check DISCORD_BOT_TOKEN"
+            in m for m in cm.output))
+        # keeps retrying gracefully rather than crashing
+        self.assertGreaterEqual(gw.connections, 1)
+
+    def test_handshake_401_marks_auth_failure(self):
+        fx = Fixture()
+        fx.page("/gw", code=401, body=b"{}")
+        from pa.wsclient import WSClient, WSError
+        with self.assertRaises(WSError) as ectx:
+            WSClient.connect(f"ws://127.0.0.1:{fx.port}/gw", timeout=5)
+        fx.close()
+        self.assertEqual(ectx.exception.code, 401)
+        self.assertTrue(discordbot._auth_failed(ectx.exception))
+
+    def test_missing_token_start_log(self):
+        fx = Fixture()
+        env = TmpEnv(DISCORD_API_BASE=fx.web_base)
+        env.env.pop("DISCORD_BOT_TOKEN", None)
+        bot = discordbot.DiscordBot(env.settings, env=env.env,
+                                    notifier=False)
+        with self.assertLogs("pa.discord", level="WARNING") as cm:
+            self.assertFalse(bot.start())
+        fx.close()
+        self.assertTrue(any("DISCORD_BOT_TOKEN not set" in m
+                            for m in cm.output))
+
+
 class TestNotifier(BotTestBase):
     def test_result_and_approval_notifications(self):
         self.gw.scripts = [lambda g: g.drop()]  # no gateway chatter

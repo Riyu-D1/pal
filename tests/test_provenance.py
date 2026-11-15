@@ -1,4 +1,4 @@
-"""final-4 E5: provenance columns, gate, /memory audit."""
+"""provenance columns, gate, /memory audit."""
 
 import unittest
 

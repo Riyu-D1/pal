@@ -71,7 +71,7 @@ _HALLUCINATE = {
     "uh", "um", "ah", "oh", "so", "subtitles",
 }
 
-# V3: one-word answers are ALSO classic noise hallucinations, but a
+# one-word answers are ALSO classic noise hallucinations, but a
 # genuine "Okay." right after pal asked a question is a real answer.
 # These pass transcript_ok only while a reply is expected (see
 # Conversation._expecting_short: pal's last line ended with '?' or pal
@@ -322,7 +322,7 @@ def transcript_ok(text, meta=None, *, no_speech_max=0.6,
     """False for empty/noise/hallucinated Whisper output. `meta` is
     transcribe_meta()'s dict: segments' max no_speech_prob and min
     avg_logprob veto a transcript when present (absent = pass).
-    `expecting_short` (V3) keeps one-word answers ("Okay.", "yeah")
+    `expecting_short` keeps one-word answers ("Okay.", "yeah")
     when pal's last line asked something or pal just spoke — outside
     that window they're still noise."""
     t = (text or "").strip()
@@ -460,7 +460,7 @@ class FillerBank:
 class ConvConfig:
     """Tunables for Conversation — tests shrink these to milliseconds."""
     def __init__(self, **kw):
-        # V6 filler discipline: one ack at ~1.2 s, one "still on it"
+        # filler discipline: one ack at ~1.2 s, one "still on it"
         # at ~5 s, never more than two fillers per turn.
         self.ack_delay = kw.get("ack_delay", (1.2, 1.45))
         self.progress_first = kw.get("progress_first", 5.0)
@@ -503,7 +503,7 @@ class Conversation:
     - on_notify(text)       -> side-channel message (the deaf DM)
     - say_info()            -> optional dict of TTS facts merged into the
       turn metric (provider name; CallTTS knows its locked provider)
-    - metrics(dict)         -> optional per-turn metric sink (V1:
+    metrics(dict) -> optional per-turn metric sink (
       call_metrics rows; called where `call turn:` logs)
 
     Turn model: a single `current` turn carries a generation counter.
@@ -545,7 +545,7 @@ class Conversation:
         self._running = False
         self._stop_reason = None
         self._info = {}              # gen -> turn record (reset in run)
-        # V3: short-reply filter context — the last line pal spoke and
+        # short-reply filter context — the last line pal spoke and
         # when playback ended. A '?' keeps the answer window open.
         self._spoke_text = ""
         self._spoke_at = None
@@ -684,7 +684,7 @@ class Conversation:
                     result["heard"].append(heard)
                     reply = (out or {}).get("reply") or ""
                     if (out or {}).get("reply_iter") is not None:
-                        # V5 streaming brain: the speaker drains the
+                        # streaming brain: the speaker drains the
                         # delta stream into clauses — TTS starts while
                         # the model is still generating.
                         self._spkq.put_nowait(
@@ -714,7 +714,7 @@ class Conversation:
                 elif kind == "item_done":
                     _tag, ikind, interrupted = ev[1], ev[2], ev[3]
                     if _tag == "opening" and self._warm is not None:
-                        # V6: filler-bank warm-up runs after the
+                        # filler-bank warm-up runs after the
                         # greeting, in an executor — never inside the
                         # turn that produced the first reply audio.
                         warm, self._warm = self._warm, None
@@ -740,7 +740,7 @@ class Conversation:
                             self._enqueue_clip(clip, tag=turn["gen"],
                                                kind="ack")
                     if prog_at and t_now >= prog_at and turn is not None:
-                        # progress_every=0 (V6) -> fire once, no re-arm
+                        # progress_every=0 -> fire once, no re-arm
                         prog_at = t_now + self.cfg.progress_every \
                             if self.cfg.progress_every else None
                         clip = self.bank.get("progress")
@@ -973,7 +973,7 @@ class Conversation:
         return self._drop
 
     async def _play_stream(self, it, tag):
-        """V5: speak a streamed reply — deltas become clauses (first
+        """speak a streamed reply — deltas become clauses (first
         ≤80 chars, then ≤160); clause n+1 is pulled and synthesised
         while n plays, so TTS starts while the model still streams."""
         from .callbrain import _cut_clause
@@ -1117,7 +1117,7 @@ class Conversation:
 
     def _metric_row(self, rec, interrupted=False, dropped=None,
                     superseded=False):
-        """One call_metrics row dict for this turn (V1)."""
+        """One call_metrics row dict for this turn."""
         t_end = rec.get("t_end")
 
         def rel_ms(key):

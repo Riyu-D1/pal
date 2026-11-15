@@ -1,4 +1,4 @@
-"""Turn outcomes + owner feedback (docs/EVOLVE.md item 2).
+"""Turn outcomes + owner feedback (docs/EVOLVE.md).
 
 Every attended turn lands one cheap `turn_outcomes` row from a
 deterministic heuristic; /good /bad, the reply buttons and the

@@ -1,8 +1,9 @@
-"""Integration builder (K2, Alita-style) — pal writes its own small
+"""Integration builder (Alita-style) — pal writes its own small
 API clients instead of needing pre-built connectors.
 
 integration_build(service, goal) -> the model produces one integration
-manifest + a set of K1-style tools ({name, purpose, code, tests}) that
+manifest + a set of made-tool-style tools ({name, purpose, code,
+tests}) that
 call the service's API through fetch(). At BUILD time the tools are
 tested against model-provided fixtures — no live calls. On pass, the
 whole bundle goes to the owner for approval (first registration shows

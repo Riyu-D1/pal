@@ -1,6 +1,6 @@
-"""S2 acceptance: research(question, depth) -> cited workspace report.
+"""acceptance: research(question, depth) -> cited workspace report.
 
-The child is an ordinary researcher sub-agent (S1); its fenced JSON
+The child is an ordinary researcher sub-agent; its fenced JSON
 {claims, sources} ledger is shaped into a Markdown report by
 research.build_report/finish. Claims without a numbered source are
 quarantined; publish=True queues page_publish as a held action."""

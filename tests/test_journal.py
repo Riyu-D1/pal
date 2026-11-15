@@ -1,4 +1,4 @@
-"""Item 7: Profile.md sync + the daily-journal system job."""
+"""Profile.md sync + the daily-journal system job."""
 
 import os
 import tempfile

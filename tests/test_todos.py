@@ -1,4 +1,4 @@
-"""Item 21: chat todos + /stop + mid-turn steering."""
+"""chat todos + /stop + mid-turn steering."""
 
 import unittest
 

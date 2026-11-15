@@ -1,4 +1,4 @@
-"""Budgeted sub-agents (S1) — delegate() hands a bounded task to a
+"""Budgeted sub-agents — delegate() hands a bounded task to a
 role assistant and the existing worker runs it.
 
 A role maps to an assistants row named ``sub:<role>`` whose ``tools``

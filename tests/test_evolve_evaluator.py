@@ -1,4 +1,4 @@
-"""final-4 E2: hash-pinned evaluator, tamper refusal, held-out
+"""hash-pinned evaluator, tamper refusal, held-out
 isolation."""
 
 import json

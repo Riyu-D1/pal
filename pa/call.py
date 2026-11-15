@@ -68,7 +68,7 @@ def in_quiet_hours(quiet: str, tz_name: str,
 
 
 class CallMetrics:
-    """call_metrics row writer (V1) — one bound recorder per call.
+    """call_metrics row writer — one bound recorder per call.
 
     `turn(dict)` is the Conversation `metrics` seam (one row per
     logged turn); `call(dict)` writes the per-call summary row when
@@ -277,7 +277,7 @@ class CallManager:
         return think
 
     def _live_fast_tools(self):
-        """V4: the three instant read-only tools Live can call — each
+        """the three instant read-only tools Live can call — each
         returns a short string, never raises, uses the existing gcal /
         gmail read helpers."""
         def _now():
@@ -362,7 +362,7 @@ class CallManager:
             return ""
 
     def _metrics(self, call_id, engine="pipeline"):
-        """The per-call call_metrics recorder (V1); None when disabled
+        """The per-call call_metrics recorder; None when disabled
         or unconfigured — the call then runs exactly as before."""
         if not getattr(self.s, "call_metrics", True):
             return None
@@ -635,7 +635,7 @@ class DiscordPyRuntime:
                for m in getattr(channel, "members", []) or []):
             self._joined.set()
         deadline = self._loop.time() + max_seconds
-        # V2: one AudioSource for the whole call when PA_CALL_AUDIO=
+        # one AudioSource for the whole call when PA_CALL_AUDIO=
         # inproc — the speaker enqueues PCM and reads silence between
         # clips; `ffmpeg` keeps the per-clip FFmpegPCMAudio path.
         audio_src = None
@@ -662,7 +662,7 @@ class DiscordPyRuntime:
             sink = _UtteranceSink()
             _dave_rx_reset()
             vc.listen(sink)
-            # V6: the filler bank warms after the greeting, in an
+            # the filler bank warms after the greeting, in an
             # executor — off the critical path (say_cached makes the
             # warm free on every call after the first)
             bank = callconv.FillerBank()
@@ -683,12 +683,12 @@ class DiscordPyRuntime:
             engines = livemod.engine_order(self._settings, self._env)
             for eng_kind in engines:
                 if eng_kind == "live":
-                    # V4: the model speaks itself — server-side VAD +
+                    # the model speaks itself — server-side VAD +
                     # interruption; out audio lands in a CallAudioSource
                     src = audio_src or CallAudioSource()
                     if audio_src is None:
                         vc.play(src)
-                    # final-5 F3: live_min budget gate (PA_LIVE_BUDGET)
+                    # live_min budget gate (PA_LIVE_BUDGET)
                     # — reserve the call's remaining minutes before the
                     # socket opens, settle ceil(live_seconds/60) after.
                     gate = None
@@ -752,7 +752,7 @@ class DiscordPyRuntime:
                         self._settings, "call_tail_short_ms", 700))
                 pipe_think = think
                 if getattr(self._settings, "call_stream_brain", True):
-                    # V5: streamed call-tier brain; the full engine
+                    # streamed call-tier brain; the full engine
                     # only runs for [[ASK_PAL]] escapes + fallback.
                     try:
                         from . import callbrain, router as routermod
@@ -854,7 +854,7 @@ class DiscordPyRuntime:
         return True
 
     async def _play_pcm(self, src, pcm):
-        """V2 in-proc play seam: enqueue one clip of 48 kHz stereo PCM
+        """in-proc play seam: enqueue one clip of 48 kHz stereo PCM
         and return when it drains (or clear() fires — barge-in)."""
         log.info("call playback: clip start (%d bytes pcm)", len(pcm))
         src.feed(pcm)
@@ -990,7 +990,7 @@ class DiscordPyRuntime:
 
 
 class CallAudioSource:
-    """V2: one long-lived AudioSource per call — gapless, no ffmpeg.
+    """one long-lived AudioSource per call — gapless, no ffmpeg.
 
     discord.py's player thread calls read() every 20 ms; we answer
     3,840-byte 48 kHz s16le stereo frames off a thread-safe queue of
@@ -1140,7 +1140,7 @@ def _safe_call(fn, *args):
 
 
 # ---------------------------------------------------------------------------
-# /call stats (V1): last call + 7-day stage percentiles from call_metrics.
+# /call stats: last call + 7-day stage percentiles from call_metrics.
 
 _STAGES = ("first_audio_ms", "stt_ms", "llm_total_ms", "tts_first_ms",
            "gaps_ms", "eos_ms")
@@ -1263,7 +1263,7 @@ _DAVE_RX = {"frames": 0, "ok": 0, "fail": 0, "pending": 0,
 _DAVE_LOG_N = {"note": 0, "warn": 0}
 _MLS_OPS = frozenset((25, 27, 29, 30))   # inbound MLS binary opcodes
 
-# V1/V2: FFmpegPCMAudio spawns per call — the in-proc path (V2) must
+# FFmpegPCMAudio spawns per call — the in-proc path must
 # keep this at zero for the whole conversation.
 _FFMPEG_SPAWNS = {"n": 0}
 
@@ -1337,7 +1337,7 @@ def _rtp_payload(data):
 
 
 def _rtp_strip_padding(data):
-    """V3: when the RTP P bit (0x20) is set the last byte is the pad
+    """when the RTP P bit (0x20) is set the last byte is the pad
     count and padding must come OFF before DAVE sees the frame —
     davey rejects padded buffers (the UnencryptedWhenPassthrough /
     DecryptionFailed spam). -> (data, stripped?)"""
@@ -1488,7 +1488,7 @@ def _patch_dave_decode():
         try:
             data = getattr(packet, "decrypted_data", None)
             if packet is not None and data:
-                # V3: strip RTP padding BEFORE DAVE (padded frames are
+                # strip RTP padding BEFORE DAVE (padded frames are
                 # what UnencryptedWhenPassthrough spammed about), then
                 # pass the canonical Opus silence frame straight to the
                 # decoder — Discord sends it DAVE-unencrypted.

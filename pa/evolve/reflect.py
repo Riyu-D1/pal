@@ -2,7 +2,7 @@
 daily-journal. Reads today's journal text + incidents + bad
 feedback and drafts at most PA_EVOLVE_REFLECT_MAX pending
 lesson/skill items. Never writes owner_facts, never applies —
-item 10's Track A does that.
+Track A does that.
 
 Model failures can't kill the job: it reuses sysjobs.model_text
 (fast tier) which already returns '' on any error.
@@ -108,7 +108,7 @@ def run(bot, payload) -> str:
                 made.append(iid)
                 from . import apply
                 apply.maybe_apply(conn, bot.s, iid, bot=bot)
-        # final-2 M2: sleeptime curator — deterministic memory
+        # sleeptime curator — deterministic memory
         # curation once a night (proposals, never silent deletes).
         if getattr(bot.s, "sleeptime", False) and \
                 getattr(bot.s, "memory_blocks", False):

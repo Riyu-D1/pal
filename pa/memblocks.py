@@ -1,4 +1,4 @@
-"""final-2 M1: pinned memory blocks — persona / human / goals /
+"""pinned memory blocks — persona / human / goals /
 world, always injected so pal sounds the same in chat, calls and
 jobs (MemGPT-style).
 

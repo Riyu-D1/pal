@@ -1,4 +1,4 @@
-"""final-2 M1: pinned memory blocks — schema, caps, versioned
+"""pinned memory blocks — schema, caps, versioned
 history + undo, always-on prompt injection (chat/call/job share
 _system), the human-block owner gate and /memory blocks."""
 

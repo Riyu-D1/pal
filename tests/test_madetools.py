@@ -1,4 +1,4 @@
-"""K1 acceptance: a fake model produces a tool; failing tests block
+"""acceptance: a fake model produces a tool; failing tests block
 registration; socket/subprocess imports rejected statically; tool_run
 executes in the sandbox; version flow + approval gate."""
 

@@ -1,4 +1,4 @@
-"""Evolve item 5: changelog ledger, /evolve command, weekly digest."""
+"""changelog ledger, /evolve command, weekly digest."""
 
 import os
 import unittest

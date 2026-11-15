@@ -1,11 +1,11 @@
-"""Self-practice curriculum (final-4 E4) — `evolve-practice` sysjob.
+"""Self-practice curriculum — `evolve-practice` sysjob.
 
 Off by default (PA_EVOLVE_PRACTICE). In owner-approved areas
 (`/evolve practice add <area>`) it drafts 3 progressively harder
 practice tasks from recent failures, runs them READ-ONLY in a
 sandboxed chat context with fake connectors (no real tool side
-effects), and turns wins into skill CANDIDATES in the E1 archive —
-never live skills, never auto-applied.
+effects), and turns wins into skill CANDIDATES in the improvement
+archive — never live skills, never auto-applied.
 
 Hard caps: PA_EVOLVE_PRACTICE_MAX_TASKS (3), the background budget
 pot (pa/budget.py) — a stopped run just returns quietly.

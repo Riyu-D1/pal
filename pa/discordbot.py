@@ -252,7 +252,7 @@ _EPHEMERAL_COMMANDS = {"connect", "connections", "disconnect",
                        "evolve", "goals", "activity", "triage"}
 _MENTION_RE = re.compile(r"<@!?\d+>")
 
-# thumbs-up/down on every attended reply (docs/EVOLVE.md item 2) —
+# thumbs-up/down on every attended reply (docs/EVOLVE.md)
 # clicks are owner-gated upstream like every other component.
 _FEEDBACK_BUTTONS = [[
     {"type": 2, "style": 2, "emoji": {"name": "👍"},
@@ -584,7 +584,7 @@ def _argv_from_interaction(data: dict):
 
 
 def _cred_modal(kind: str) -> dict:
-    """A1: the credential-capture modal. Values come back inside a
+    """the credential-capture modal. Values come back inside a
     type-5 interaction submit — they never appear as a channel
     message, so Discord never stores the secret in history."""
     def _field(cid, label, placeholder, required=True):
@@ -661,6 +661,12 @@ class _ChatProgress(threading.Thread):
         self._done.set()
 
 
+def _auth_failed(exc) -> bool:
+    """The token is wrong, not the network: http 401 at the ws
+    handshake or gateway close 4004 (authentication failed)."""
+    return getattr(exc, "code", None) in (401, 4004)
+
+
 class DiscordBot:
     def __init__(self, settings, db_path=None, env=None, notifier=True,
                  engine=None):
@@ -702,9 +708,11 @@ class DiscordBot:
     def start(self):
         """Launch gateway + notifier threads. No-op when disabled."""
         if not self.enabled:
-            log.info("discord disabled (%s)",
-                     "DISCORD_ENABLED=false" if not self.s.discord_enabled
-                     else "no DISCORD_BOT_TOKEN")
+            log.warning("discord disabled (%s)",
+                        "DISCORD_ENABLED=false"
+                        if not self.s.discord_enabled
+                        else "DISCORD_BOT_TOKEN not set — put it in "
+                             ".env to enable the bot")
             return False
         t = threading.Thread(target=self.run_forever, daemon=True,
                              name="pa-discord-gateway")
@@ -737,7 +745,11 @@ class DiscordBot:
             try:
                 self._session()
             except (WSClosed, WSError, OSError) as e:
-                log.warning("gateway session dropped: %s", e)
+                if _auth_failed(e):
+                    log.error("Discord token rejected (401) — check "
+                              "DISCORD_BOT_TOKEN")
+                else:
+                    log.warning("gateway session dropped: %s", e)
             except Exception:
                 log.exception("gateway loop error")
             if self.stop_event.is_set():
@@ -854,7 +866,7 @@ class DiscordBot:
                 argv = _argv_from_interaction(d.get("data") or {})
                 mk = self._cred_modal_kind(argv)
                 if mk:
-                    # A1: /credentials add|otp opens a private modal —
+                    # /credentials add|otp opens a private modal
                     # no secret ever travels as a channel message.
                     from . import secretform
                     secretform.mark_pending(conn, mk)
@@ -881,13 +893,13 @@ class DiscordBot:
             if route == "chat":
                 if self._maybe_secret_paste(conn, d):
                     return              # sealed or eaten — never a chat turn
-                # final-6: "i'm busy"/"i'm free" feed the voice-notes
+                # "i'm busy"/"i'm free" feed the voice-notes
                 # auto mode (pa.busy); the text still runs a normal turn
                 busymod.note_text(conn, self._chat_text(d))
                 self._start_chat(d)
                 return
             if route == "voice":
-                # final-6: a voice message marks the owner busy — auto
+                # a voice message marks the owner busy — auto
                 # mode replies in kind for the next ~10 minutes
                 busymod.note_voice(conn)
                 self._start_voice(d)
@@ -900,7 +912,7 @@ class DiscordBot:
                 return
             argv = self._argv_from_message(d)
             if self._maybe_text_secret(conn, d, argv):
-                return                  # A1: message deleted, not re-posted
+                return                  # message deleted, not re-posted
             reply = self.execute(conn, argv,
                                  str(d.get("channel_id") or ""))
             comps = _cred_components() if argv and argv[
@@ -1370,8 +1382,8 @@ class DiscordBot:
             f"→ **{label}**")
 
     def _handle_goal_click(self, conn, d, iid, token, parts):
-        """goalbtn:<id>:<status> — owner click flips a goal's status
-        (final-2 G1)."""
+        """goalbtn:<id>:<status> — owner click flips a goal's
+        status."""
         from . import goals as goalsmod
         try:
             gid, status = int(parts[1]), parts[2]
@@ -1391,7 +1403,7 @@ class DiscordBot:
             iid, token,
             f"{mark} — **#{g['id']}** {g['title'][:140]}")
 
-    # -- A1 secret capture ----------------------------------------------------
+    # -- secret capture -------------------------------------------------------
     def _cred_modal_kind(self, argv):
         """'credentials add'/'credentials otp' with NO further args on
         a slash command -> open the capture modal instead of replying."""
@@ -1470,7 +1482,7 @@ class DiscordBot:
                 out.get("domain") or out.get("message") or "")
 
     def _maybe_secret_paste(self, conn, d: dict) -> bool:
-        """A1: while a capture is pending, a credential-shaped DM is
+        """while a capture is pending, a credential-shaped DM is
         sealed + the message deleted instead of starting a chat turn
         (nothing is journaled). Returns True when the event was
         consumed."""
@@ -1527,7 +1539,7 @@ class DiscordBot:
         return True
 
     def _maybe_text_secret(self, conn, d: dict, argv) -> bool:
-        """A1: 'credentials add <d> <u> <p>' typed as a plain message.
+        """'credentials add <d> <u> <p>' typed as a plain message.
         The secret is sitting in a channel message — delete it
         best-effort; seal only when a capture is pending, otherwise
         refuse (text passwords are no longer accepted)."""
@@ -1577,7 +1589,7 @@ class DiscordBot:
                 "wrong>` adds detail.")
             return
         if len(parts) == 3 and parts[0] == "ownkind":
-            # P1: the /connect 'whose account?' button
+            # the /connect 'whose account?' button
             from . import connectflows
             provider, kind = parts[1], parts[2]
             try:
@@ -1592,7 +1604,7 @@ class DiscordBot:
                     iid, token, f"couldn't mark account: {e}")
             return
         if len(parts) == 2 and parts[0] == "credmodal":
-            # A1: "Save password" / "Save code" buttons open the modal
+            # "Save password" / "Save code" buttons open the modal
             if not getattr(self.s, "secret_capture", False):
                 self.api.interaction_reply(
                     iid, token,
@@ -2000,7 +2012,7 @@ class DiscordBot:
 
     def _call_cmd(self, conn, args):
         """`/call test|stats|<what to say>` — try the call flow, or
-        show call_metrics timing stats (V1)."""
+        show call_metrics timing stats."""
         text = " ".join(args).strip()
         if not text:
             return "usage: call <test|stats|what pal should say>"
@@ -2184,7 +2196,7 @@ class DiscordBot:
                 + self._evolve_usage(conn, day))
 
     def _budget_usage(self, conn) -> str:
-        """B3: today's budget lines — remaining per resource for the
+        """today's budget lines — remaining per resource for the
         tracked scopes, top-3 busiest, escalations left."""
         try:
             from . import budget as _budget
@@ -2205,7 +2217,7 @@ class DiscordBot:
             return ""
 
     def _evolve_usage(self, conn, day) -> str:
-        """item 19: evolve on/off + open items + last apply/rollback
+        """evolve on/off + open items + last apply/rollback
         + escalate usage — omitted entirely when the tables aren't
         there yet."""
         try:
@@ -2985,7 +2997,7 @@ class DiscordBot:
         return f"task #{tid} queued for {a['name']}"
 
     def _policy_cmd(self, conn, args):
-        """P5: /policy <tool> [args-json] — show the Decision a call
+        """/policy <tool> [args-json] — show the Decision a call
         would get (class, account, verdict, reason)."""
         if not args:
             return ("usage: policy <tool> [args-json] — explains what "
@@ -3010,7 +3022,7 @@ class DiscordBot:
         return (f"{mark} `{tool}` → **{d.verdict}**{tail}\n"
                 f"class `{d.action_class}` on {whose} — {d.reason}")
 
-    # -- final-2 G1: standing goals ------------------------------------------
+    # -- standing goals ------------------------------------------
     def _goals_cmd(self, conn, args, channel_id):
         """`/goals` — the standing-goals card. The list posts with
         pause/done buttons (goalbtn:<id>:<status>); `goals add|done|
@@ -3102,7 +3114,7 @@ class DiscordBot:
 
     def _activity_cmd(self, conn, args, channel_id):
         """`/activity [today|week|all]` — the local feed of what pal
-        noticed, drafted, queued for approval and did (final-2 G3).
+        noticed, drafted, queued for approval and did.
         Pending cards re-post with Approve/Reject buttons."""
         if not getattr(self.s, "activity_feed", False):
             return ("activity feed is off — set PA_ACTIVITY=true "
@@ -3122,7 +3134,7 @@ class DiscordBot:
         return "\n".join(lines)
 
     def _triage_cmd(self, conn):
-        """`/triage` — today's pal-DB inbox buckets (final-2 T1)."""
+        """`/triage` — today's pal-DB inbox buckets."""
         if not getattr(self.s, "triage", False):
             return ("inbox triage is off — set PA_TRIAGE=true "
                     "(docs/FEATURES.md).")
@@ -3160,7 +3172,7 @@ class DiscordBot:
             return f"✅ {res['label']} connected ({res['note']})."
         if res["kind"] == "composio":
             self._watch_composio(res["provider"], res.get("meta") or {})
-        # P1: ask whose account it is unless the label already says —
+        # ask whose account it is unless the label already says
         # the answer writes connections.owner_kind (fail closed:
         # 'owner' until the owner picks 'pal's')
         if not account and channel_id:
@@ -3463,7 +3475,7 @@ class DiscordBot:
             self.stop_event.wait(1.0)
 
     def _card_worker(self, text, inbox_id):
-        """A6 'ghcard' rows: a pre-rendered card (GitHub CI/PR events)
+        """'ghcard' rows: a pre-rendered card (GitHub CI/PR events)
         posted straight to the owner DM — no agent turn, so a bad
         payload can never reach the model."""
         try:
@@ -3505,7 +3517,7 @@ class DiscordBot:
             conn.close()
 
     def _away_greeting(self, channel_id) -> str:
-        """'While you were away' preamble (final-2 G3): a 3-line
+        """'While you were away' preamble: a 3-line
         activity recap prepended to the owner's first DM reply after
         >= 4h of silence — PA_ACTIVITY + PA_ACTIVITY_GREETING."""
         if not (getattr(self.s, "activity_feed", False) and

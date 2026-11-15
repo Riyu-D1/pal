@@ -1,4 +1,4 @@
-"""K3 — skill auto-extraction (Voyager-style, docs/TOOLMAKING.md).
+"""skill auto-extraction (Voyager-style, docs/TOOLMAKING.md).
 
 After an attended turn lands an 'ok' outcome with >= 3 successful
 tool steps, maybe_extract() asks the fast model to distill the trace
@@ -88,7 +88,7 @@ def _similar_exists(conn, s, name: str, description: str) -> bool:
 
 def _mark_seen(conn, key: str) -> bool:
     """True if this proposal was already queued (pa_settings marker —
-    keeps K3 off the migration budget)."""
+    keeps this off the migration budget)."""
     from . import db as dbmod
     if dbmod.get_setting(conn, key):
         return True

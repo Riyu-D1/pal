@@ -1,4 +1,4 @@
-"""final-2 M4: personal KG — deterministic extraction from
+"""personal KG — deterministic extraction from
 wikilinks/tags/frontmatter, temporal edges that close instead of
 delete, changed-note-only builds, kg_query phrasings."""
 

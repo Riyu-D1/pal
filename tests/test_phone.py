@@ -1,4 +1,4 @@
-"""final-3 X3: phone capabilities — fake termux-* binaries on PATH
+"""phone capabilities — fake termux-* binaries on PATH
 agent-side, and the chattools policy matrix pal-side.
 
 No real Android here: tiny stub scripts stand in for termux-*; the

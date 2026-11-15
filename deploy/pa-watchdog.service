@@ -6,6 +6,10 @@
 #   systemctl --user enable --now pa-watchdog
 # It polls http://127.0.0.1:$PA_PORT/healthz and restarts `pa` when
 # it stays sick; the owner gets one DM per outage window.
+# Scope + unit come from pal's env (PA_SYSTEMD_SCOPE=user,
+# PA_SYSTEMD_UNIT=pa defaults). With a SYSTEM pa.service install
+# (PA_SYSTEMD_SCOPE=system) use deploy/pa-watchdog-system.service
+# instead — a user unit can't restart system units.
 [Unit]
 Description=pal watchdog — restart pa when /healthz stays sick
 After=pa.service
@@ -13,7 +17,7 @@ After=pa.service
 [Service]
 Type=simple
 # adjust if your checkout isn't ~/pal (docs/DEPLOY.md layout)
-EnvironmentFile=%h/pal/.env
+EnvironmentFile=-%h/pal/.env
 ExecStart=%h/pal/.venv/bin/python -m pa watchdog
 WorkingDirectory=%h/pal
 Restart=always

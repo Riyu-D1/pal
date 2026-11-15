@@ -1,4 +1,4 @@
-"""Optional off-box backup copy (final-4 R1).
+"""Optional off-box backup copy.
 
 `PA_BACKUP_OFFSITE=gdrive@pal` uploads each encrypted `.enc` export to
 **pal's own** Google Drive right after `scheduled-backup` writes it —

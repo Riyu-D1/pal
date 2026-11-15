@@ -1,4 +1,4 @@
-"""final-1 B1/B2 — budget ledger + enforcement."""
+"""Budget ledger + enforcement."""
 import tempfile
 import unittest
 from datetime import datetime, timedelta, timezone
@@ -113,7 +113,7 @@ class TestEnforcement(Case):
 
 
 class TestLeanCatalogue(unittest.TestCase):
-    """L1: PA_TOOL_TOPK prunes the prompt catalogue."""
+    """PA_TOOL_TOPK prunes the prompt catalogue."""
     S = type("S", (), {"computer_enabled": False, "tool_topk": 16})()
 
     def test_flag_off_keeps_everything(self):
@@ -128,7 +128,7 @@ class TestLeanCatalogue(unittest.TestCase):
             if name in gated:
                 continue
             spec = chattools.CHAT_TOOLS[name]
-            # final-2 flag-gated tools only exist while their PA_*
+            # flag-gated tools only exist while their PA_*
             # flag is on (this fake settings carries none)
             if spec.get("flag") and not getattr(
                     s, spec["flag"], False):

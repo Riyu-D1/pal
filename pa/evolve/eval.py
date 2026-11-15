@@ -113,7 +113,7 @@ def run_fixture(fx, settings, env=None, db_path=None) -> dict:
 def eval_set_hash(eval_dir=None) -> str:
     """SHA-256 over the fixture set (names + bytes) — the tag scores
     are recorded against so a score is only compared on the same
-    pinned set (final-4 E1/E2)."""
+    pinned set."""
     import hashlib
     d = eval_dir or FIXTURE_DIR
     h = hashlib.sha256()
@@ -188,7 +188,7 @@ def _baseline(eval_dir=None):
 
 
 def store_score(conn, item_id, score: float):
-    """Item 10/12 hook: record an eval score on an evolve_item."""
+    """Record an eval score on an evolve_item (eval/self-heal hook)."""
     from . import items
     items.set_status(conn, item_id,
                      items.get(conn, item_id)["status"],

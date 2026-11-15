@@ -1,5 +1,5 @@
-"""A2: mail-inbound — pal's own Gmail as an ingest channel for the
-owner (final-5, PA_MAIL_INBOUND).
+"""mail-inbound — pal's own Gmail as an ingest channel for the
+owner (PA_MAIL_INBOUND).
 
 Seeded DISABLED (migration 44, every 5 min); the owner turns it on
 with '/jobs mail-inbound on' plus PA_MAIL_INBOUND=true.

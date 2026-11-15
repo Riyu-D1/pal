@@ -217,7 +217,8 @@ class ChatProvider:
     def chat_iter(self, messages, max_completion_tokens=1024,
                   timeout=None):
         """Incremental streaming: yields content-delta strings as SSE
-        chunks arrive (V5 call brain cuts the first clause mid-stream).
+        chunks arrive — the call brain cuts the first clause
+        mid-stream.
         After the generator ends, self.last_usage/last_message hold the
         assembled result."""
         if not self.configured:

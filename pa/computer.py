@@ -1131,7 +1131,7 @@ class ComputerService:
             return d.status()
         if action == "desktop_stop":
             return d.stop()
-        # B2: refuse a new browser session when today's browser_min
+        # refuse a new browser session when today's browser_min
         # budget is spent — owner chat still works, the desktop
         # doesn't silently burn the daily allowance.
         try:

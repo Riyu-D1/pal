@@ -1,4 +1,4 @@
-"""Item 28: approval-gated /update + self-update --dry-run."""
+"""approval-gated /update + self-update --dry-run."""
 
 import unittest
 from unittest import mock
@@ -115,6 +115,69 @@ class TestWiring(unittest.TestCase):
         from pa import allowrules
         self.assertNotIn("self_update", allowrules.ALWAYS_CAPABLE)
         self.assertIn("update", discordbot._COMMAND_NAMES)
+
+
+class TestSystemdRestart(unittest.TestCase):
+    """PA_SYSTEMD_SCOPE/UNIT steer the restart command."""
+
+    def _argv(self, scope="user", unit="pa"):
+        calls = []
+
+        def runner(argv, **kw):
+            calls.append(argv)
+            return type("P", (), {"returncode": 0, "stdout": "",
+                                  "stderr": ""})()
+        with mock.patch.object(selfupdate.shutil, "which",
+                               return_value="/bin/systemctl"):
+            selfupdate._default_restart(runner, scope, unit)
+        return calls[0]
+
+    def test_default_is_user_pa(self):
+        self.assertEqual(
+            self._argv(), ["systemctl", "--user", "restart", "pa"])
+
+    def test_system_scope_drops_user_flag(self):
+        self.assertEqual(self._argv("system"),
+                         ["systemctl", "restart", "pa"])
+
+    def test_unit_rename(self):
+        self.assertEqual(self._argv("system", "pal-svc"),
+                         ["systemctl", "restart", "pal-svc"])
+
+    def test_settings_plumbed_into_apply(self):
+        env = TmpEnv(PA_SYSTEMD_SCOPE="system",
+                     PA_SYSTEMD_UNIT="pal-svc")
+        calls = []
+
+        shas = iter(["aaaa\n", "bbbb\n"])
+
+        def runner(argv, **kw):
+            calls.append(argv)
+            return type("P", (), {
+                "returncode": 0,
+                "stdout": next(shas) if "rev-parse" in argv else "",
+                "stderr": ""})()
+        with mock.patch.object(selfupdate.shutil, "which",
+                               return_value="/bin/systemctl"):
+            selfupdate.apply(
+                root="/x", runner=runner,
+                health_probe=lambda: True, settings=env.settings)
+        self.assertIn(["systemctl", "restart", "pal-svc"], calls)
+
+    def test_config_validation(self):
+        from pa.config import ConfigError, load_settings
+        env = TmpEnv()
+        base = dict(env.env)
+        base["PA_SYSTEMD_SCOPE"] = "bogus"
+        with self.assertRaises(ConfigError):
+            load_settings(base)
+        base["PA_SYSTEMD_SCOPE"] = "system"
+        base["PA_SYSTEMD_UNIT"] = "pa.service;rm -rf /"
+        with self.assertRaises(ConfigError):
+            load_settings(base)
+        base["PA_SYSTEMD_UNIT"] = "pa-web.service"
+        self.assertEqual(load_settings(base).systemd_unit,
+                         "pa-web.service")
 
 
 if __name__ == "__main__":

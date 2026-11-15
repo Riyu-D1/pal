@@ -1,4 +1,4 @@
-"""Evolve item 13: canary deploy — apply_sha + rollback."""
+"""canary deploy — apply_sha + rollback."""
 
 import unittest
 

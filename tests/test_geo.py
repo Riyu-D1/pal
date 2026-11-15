@@ -1,4 +1,4 @@
-"""Item 18: weather + places tools."""
+"""weather + places tools."""
 
 import unittest
 

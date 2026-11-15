@@ -1,4 +1,4 @@
-"""Item 9: signed inbound webhooks."""
+"""signed inbound webhooks."""
 
 import json
 import unittest

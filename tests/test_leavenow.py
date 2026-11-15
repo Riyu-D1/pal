@@ -1,4 +1,4 @@
-"""A5: leave-now alerts — TfL journey + deduped notify() pings."""
+"""leave-now alerts — TfL journey + deduped notify() pings."""
 
 import datetime
 import json

@@ -1,4 +1,4 @@
-"""final-6 F2: voice_notes 'auto' — voice notes only while the owner
+"""voice_notes 'auto' — voice notes only while the owner
 is busy (pa.busy triggers + the voice_should_send gate)."""
 
 import datetime

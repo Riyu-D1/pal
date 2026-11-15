@@ -1,4 +1,4 @@
-"""Vision captions on the free tier (item 4).
+"""Vision captions on the free tier.
 
 Chain order: PA_VISION_ORDER (default groq,gemini,cloudflare). Each
 backend tries PA_VISION_MODEL_<BACKEND> first, then a short built-in

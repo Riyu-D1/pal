@@ -57,9 +57,11 @@ LLM_BASE_URL=… LLM_MODEL=… LLM_API_KEY=… \
   scripts/setup.sh --non-interactive
 #    (interactive `scripts/setup.sh` prompts for the same three values)
 
-# 3. load the venv + .env into THIS shell — pal never reads .env by
-#    itself (systemd uses EnvironmentFile=, compose uses env_file:):
-. .venv/bin/activate && set -a && . ./.env && set +a
+# 3. activate the venv — `python -m pa` auto-loads `.env` from the
+#    working dir ($PA_ENV_FILE overrides the path; vars already in
+#    the environment win, so systemd EnvironmentFile=/env_file: still
+#    work the same):
+. .venv/bin/activate
 
 #    verify — all FAIL lines must be green:
 python -m pa doctor

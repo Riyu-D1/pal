@@ -1,4 +1,4 @@
-"""V8 call-bench: fake sessions/streams drive first-audio metrics."""
+"""call-bench: fake sessions/streams drive first-audio metrics."""
 import asyncio
 import tempfile
 import unittest

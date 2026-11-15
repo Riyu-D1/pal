@@ -1,4 +1,4 @@
-"""final-6 F1: pa.calsource — one calendar read path.
+"""pa.calsource — one calendar read path.
 
 Composio 'googlecalendar' connection first (read-only
 GOOGLECALENDAR_FIND_EVENT), the legacy GCalClient second, None +
@@ -246,7 +246,7 @@ class TestTriageViaComposio(unittest.TestCase):
         self.assertEqual(rows[0]["source"], "leave-now")
 
     def test_composio_only_no_legacy_env_needed(self):
-        """The final-5 bug: calendar jobs silently skipped when the
+        """The bug: calendar jobs silently skipped when the
         GMAIL_* env grant wasn't deployed. Now Composio alone feeds
         the tick — this test runs with no GMAIL_* creds at all."""
         self.assertFalse(

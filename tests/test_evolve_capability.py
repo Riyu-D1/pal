@@ -1,4 +1,4 @@
-"""Evolve item 6: need_capability tool + one-call planner."""
+"""need_capability tool + one-call planner."""
 
 import unittest
 

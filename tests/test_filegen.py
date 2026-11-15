@@ -1,4 +1,4 @@
-"""Item 15+16: file generation incl. the built-in PDF writer."""
+"""file generation incl. the built-in PDF writer."""
 
 import unittest
 

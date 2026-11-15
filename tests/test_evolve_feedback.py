@@ -1,4 +1,4 @@
-"""Evolve item 2: turn outcomes, /good /bad, reply buttons,
+"""turn outcomes, /good /bad, reply buttons
 correction detection, and the feedback chat tool."""
 
 import json

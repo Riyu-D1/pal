@@ -1,4 +1,4 @@
-"""final-3 X2: the pa-node agent — in-process on a random port.
+"""the pa-node agent — in-process on a random port.
 
 Covers auth (constant-time Bearer), the capability allowlist, file
 jail traversal, private-IP fetch blocking, self-throttle on low

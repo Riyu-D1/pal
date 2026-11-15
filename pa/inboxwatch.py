@@ -320,7 +320,7 @@ def _run(bot, conn) -> str:
         conn.execute(
             "UPDATE inbox_seen SET classification=? WHERE message_id=?",
             (cls, mid))
-        # final-2 T1: pal-DB triage bucket + local reply draft
+        # pal-DB triage bucket + local reply draft
         if getattr(bot.s, "triage", False):
             try:
                 from . import triage as triagemod

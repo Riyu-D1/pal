@@ -1,4 +1,4 @@
-"""Item 29: /usage + /settings page."""
+"""/usage + /settings page."""
 
 import unittest
 

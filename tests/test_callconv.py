@@ -499,7 +499,8 @@ class TestConversation(unittest.TestCase):
 
     def test_supersede_merges_no_stale_reply(self):
         io_ = FakeIO()
-        io_.think_delay = 0.25            # turn 1 still running on U2
+        io_.think_delay = 0.25            # first turn still running
+                                          # at the second utterance
         io_.transcripts = [{"heard": "part one"},
                            {"heard": "part one and part two"}]
         io_.think_replies = [{"reply": "stale answer.", "done": False},
@@ -786,7 +787,7 @@ class TestConversation(unittest.TestCase):
         self.assertTrue(any("call turn:" in m and "dropped=noise" in m
                             for m in cm.output), cm.output)
 
-    # -- V6 filler discipline -----------------------------------------
+    # -- filler discipline ---------------------------------------------
     def _bank(self):
         bank = callconv.FillerBank()
         bank.add("ack", b"ACKCLIP")

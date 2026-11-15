@@ -56,7 +56,8 @@ def plan(root: str = None, runner=subprocess.run) -> dict:
 
 
 def apply(root: str = None, runner=subprocess.run, restart=None,
-          health_probe=None, health_seconds=60, port=8080) -> dict:
+          health_probe=None, health_seconds=60, port=8080,
+          settings=None) -> dict:
     """fetch + merge --ff-only @{u}, then the canary path: restart +
     health poll + auto-rollback (docs/EVOLVE.md #13). With no
     systemd the caller gets {needs_restart} — the old
@@ -76,8 +77,8 @@ def apply(root: str = None, runner=subprocess.run, restart=None,
     rc, head, _ = _git(root, ["rev-parse", "--short", "HEAD"],
                        runner=runner)
     if prev and head != prev[:len(head)]:
-        res = _canary(root, prev, runner, restart, health_probe,
-                      health_seconds, port)
+        res = _canary(root, prev, runner, _restart(restart, runner,
+                      settings), health_probe, health_seconds, port)
         res["sha"] = head
         res["output"] = out
         return res
@@ -104,13 +105,31 @@ import time
 import urllib.request
 
 
-def _default_restart(runner=subprocess.run) -> bool:
-    """systemctl --user restart pa. False when systemd isn't there —
-    callers surface {needs_restart} rather than pretend."""
+def _scope_unit(settings):
+    """(scope, unit) for restarts — PA_SYSTEMD_SCOPE/PA_SYSTEMD_UNIT
+    on Settings, 'user'/'pa' while unset (the user-unit default)."""
+    return (getattr(settings, "systemd_scope", "user"),
+            getattr(settings, "systemd_unit", "pa"))
+
+
+def _restart(restart, runner, settings):
+    if restart is not None:
+        return restart
+    scope, unit = _scope_unit(settings)
+    return lambda: _default_restart(runner, scope, unit)
+
+
+def _default_restart(runner=subprocess.run, scope="user",
+                     unit="pa") -> bool:
+    """`systemctl [--user] restart <unit>`. False when systemd isn't
+    there — callers surface {needs_restart} rather than pretend."""
     if shutil.which("systemctl") is None:
         return False
-    p = runner(["systemctl", "--user", "restart", "pa"],
-               capture_output=True, text=True, timeout=60)
+    argv = ["systemctl"]
+    if scope == "user":
+        argv.append("--user")
+    argv += ["restart", unit]
+    p = runner(argv, capture_output=True, text=True, timeout=60)
     return p.returncode == 0
 
 
@@ -152,7 +171,6 @@ def _diff_paths(root, base, sha, runner) -> list:
 def _canary(root, prev, runner, restart, health_probe,
             health_seconds, port) -> dict:
     """Shared post-checkout path: restart -> health poll -> rollback."""
-    restart = restart or (lambda: _default_restart(runner))
     if not restart():
         return {"ok": True, "needs_restart": True,
                 "previous_sha": prev,
@@ -173,7 +191,7 @@ def _canary(root, prev, runner, restart, health_probe,
 
 def apply_sha(sha: str, root: str = None, runner=subprocess.run,
               restart=None, health_probe=None, health_seconds=60,
-              port=8080, policy=None) -> dict:
+              port=8080, policy=None, settings=None) -> dict:
     """Canary checkout of a known sha: ff-only to it, restart,
     poll /healthz, auto-rollback on failure. Protected-path diffs
     are refused outright (owner reviews those by hand)."""
@@ -201,15 +219,16 @@ def apply_sha(sha: str, root: str = None, runner=subprocess.run,
         return {"ok": False, "error": "not_ff",
                 "message": (err or out)[:400] or
                            "not fast-forwardable"}
-    res = _canary(root, prev, runner, restart, health_probe,
-                  health_seconds, port)
+    res = _canary(root, prev, runner, _restart(restart, runner,
+                  settings), health_probe, health_seconds, port)
     res["sha"] = sha[:12]
     return res
 
 
 def rollback(previous_sha: str, root: str = None,
              runner=subprocess.run, restart=None,
-             health_probe=None, health_seconds=30, port=8080) -> dict:
+             health_probe=None, health_seconds=30, port=8080,
+             settings=None) -> dict:
     """Explicit reset to a recorded previous SHA (never force-push,
     never an unknown ref) + restart + health re-check."""
     root = root or repo_root()
@@ -219,7 +238,7 @@ def rollback(previous_sha: str, root: str = None,
     if rc != 0:
         return {"ok": False, "error": "reset_failed",
                 "message": (err or out)[:400]}
-    restart = restart or (lambda: _default_restart(runner))
+    restart = _restart(restart, runner, settings)
     restarted = restart()
     probe = health_probe or _default_health(port)
     healthy = _wait_health(probe, health_seconds) if restarted \

@@ -1,4 +1,4 @@
-"""W1: file workspace — durable per-project files with versions.
+"""file workspace — durable per-project files with versions.
 
 Root is ``<PA_DATA_DIR>/workspace/<project>/``. Version metadata lives
 in the ``files`` table (migration 36); bytes live on disk: the latest
@@ -274,8 +274,8 @@ def files_line(conn, s, project=None) -> str:
 
 
 def _index_title(conn, s, project, path, data):
-    """Feed file titles into Run 2's recall index when present —
-    feature-detected: final-2 may land pa/recall.py later."""
+    """Feed file titles into pa/recall.py's FTS index when present —
+    feature-detected so the module stays optional."""
     try:
         from . import recall as recallmod
     except ImportError:

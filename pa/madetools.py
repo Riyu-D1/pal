@@ -1,4 +1,4 @@
-"""K1: tool making (LATM arxiv:2305.17126 / CREATOR arxiv:2305.14318).
+"""tool making (LATM arxiv:2305.17126 / CREATOR arxiv:2305.14318).
 
 pal writes small pure-Python tools itself: tool_make asks the model
 for one file defining ``run(args)`` plus 3-5 ``test_*`` functions,
@@ -491,7 +491,8 @@ def _queue_register(ctx, name, version, code, tests, manifest) -> str:
 
 def _queue_register_like(ctx, tool: str, args: dict) -> str:
     """Generic held action: a job_action the owner's Approve replays
-    through execute_approved (K2 uses it for integration_register)."""
+    through execute_approved (integrations use it for
+    integration_register)."""
     from . import approvals
     return approvals.create_approval(
         ctx.conn, "job_action",

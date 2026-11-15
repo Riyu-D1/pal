@@ -1,0 +1,31 @@
+# pal user unit — web + worker + scheduler + Discord bot.
+# The documented default (docs/DEPLOY.md): runs under your own user's
+# systemd, which is also the scope pal's watchdog and the /update
+# command restart (`systemctl --user restart pa`) — no config needed.
+#
+# 1. mkdir -p ~/.config/systemd/user
+# 2. cp deploy/pa-user.service ~/.config/systemd/user/pa.service
+# 3. edit paths below if your checkout isn't ~/pal
+# 4. systemctl --user daemon-reload && systemctl --user enable --now pa
+# 5. sudo loginctl enable-linger $USER   # keep it running when logged out
+[Unit]
+Description=pal — self-hosted personal assistant
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+# ——— customise if your checkout isn't ~/pal ———
+WorkingDirectory=%h/pal
+EnvironmentFile=-%h/pal/.env
+ExecStart=%h/pal/.venv/bin/python -m pa serve
+# —————————————————————————————————————————————
+Restart=on-failure
+RestartSec=5
+# pal binds loopback by default; the web UI is never internet-facing
+# without the documented tunnel/fly topology — see docs/SECURITY.md.
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=default.target

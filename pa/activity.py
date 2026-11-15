@@ -1,4 +1,4 @@
-"""final-2 G3: the local activity feed — ONE durable store for
+"""the local activity feed — ONE durable store for
 everything unattended pal work produces.
 
 kind:

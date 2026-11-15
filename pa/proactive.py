@@ -1,4 +1,4 @@
-"""final-2 G2: the proactive read-only tick.
+"""the proactive read-only tick.
 
 Each due standing goal gets ONE bounded unattended turn: fast-tier
 model, `job:proactive-tick` budget (the shared background pot), only
@@ -146,7 +146,7 @@ def run(conn, s, env, engine=None, channel_id="",
             _tick_goal(conn, s, env, engine, g, channel_id,
                        post_pending, allow, cap, now=now)
             for g in due]
-    # J1: multi-day project heartbeat — one step per running project
+    # multi-day project heartbeat — one step per running project
     if projects_on:
         try:
             from . import projects as projmod

@@ -1,4 +1,4 @@
-"""Item 10: standing allow rules — auto-approve safe tools only."""
+"""standing allow rules — auto-approve safe tools only."""
 
 import unittest
 

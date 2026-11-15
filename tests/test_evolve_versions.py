@@ -1,4 +1,4 @@
-"""Evolve item 8: versioned skills + sanitised prompt snippets."""
+"""versioned skills + sanitised prompt snippets."""
 
 import os
 import unittest

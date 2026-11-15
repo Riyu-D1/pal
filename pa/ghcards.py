@@ -1,4 +1,4 @@
-"""A6: GitHub CI/PR events -> Discord cards (final-5).
+"""GitHub CI/PR events -> Discord cards.
 
 On a webhook endpoint named 'github' or 'ci', CI-ish GitHub events
 (workflow_run, check_suite, pull_request, issue_comment) are rendered

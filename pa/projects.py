@@ -1,4 +1,4 @@
-"""final-2 J1: multi-day projects — a goal-linked plan pal advances
+"""multi-day projects — a goal-linked plan pal advances
 one step per proactive tick.
 
 plan_json:

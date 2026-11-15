@@ -1,4 +1,4 @@
-"""A4: Notion -> recall FTS + KG indexing (read-only, cursor'd)."""
+"""Notion -> recall FTS + KG indexing (read-only, cursor'd)."""
 
 import unittest
 from unittest.mock import patch

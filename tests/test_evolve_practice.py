@@ -1,4 +1,4 @@
-"""final-4 E4: self-practice curriculum — candidates, budget stop,
+"""self-practice curriculum — candidates, budget stop
 no real connectors."""
 
 import unittest
@@ -92,7 +92,7 @@ class TestPractice(unittest.TestCase):
 
 
 class TestSeededSchedule(unittest.TestCase):
-    """final-5 F1: migration 43 seeds the disabled evolve-practice
+    """migration 43 seeds the disabled evolve-practice
     schedule so `/jobs evolve-practice on` works on a fresh DB."""
 
     def _rows(self, conn):

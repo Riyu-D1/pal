@@ -448,7 +448,7 @@ class ChatEngine:
             block = skillsmod.prompt_block(conn, self.s)
             if block:
                 facts_txt += "\n\n" + block
-                # K3 retrieval: mark the top-3 skills for this query
+                # retrieval: mark the top-3 skills for this query
                 if getattr(self.s, "skillextract", False) and query:
                     try:
                         from . import skillextract as sx
@@ -462,7 +462,7 @@ class ChatEngine:
                         pass
         except Exception:
             pass
-        # final-2 M1: pinned memory blocks — persona/human/goals/
+        # pinned memory blocks — persona/human/goals/
         # world always apply (chat, calls and unattended jobs share
         # this _system path, so pal sounds the same everywhere).
         if getattr(self.s, "memory_blocks", False):
@@ -588,7 +588,7 @@ class ChatEngine:
                 brain=self._brain,
                 **self._tool_ctx_kwargs)
             pending = ctx.pending
-            # item 15: 'think harder' — armed by /think, a
+            # 'think harder' — armed by /think, a
             # low_confidence outcome, or the planner; one escalate
             # tier run per turn, only while PA_ROUTER_ESCALATE is on.
             think = False
@@ -634,7 +634,7 @@ class ChatEngine:
                         scope="background" if unattended
                         else "owner-chat")
                 except ProviderError as e:
-                    # item 15: all backends failed — one escalate
+                    # all backends failed — one escalate
                     # retry when the flag is on, then give up
                     raw = None
                     if not think and getattr(
@@ -730,7 +730,7 @@ class ChatEngine:
         "confirm", "cancelled", "denied", "no_task", "stop"}
 
     def _tool_incident(self, conn, channel_id, name, result):
-        """Item 1: a tool error/not_configured observation becomes one
+        """a tool error/not_configured observation becomes one
         scrubbed incident row — recorder failures never touch the turn."""
         err = result.get("error") if isinstance(result, dict) else None
         if not err or err in self._TOOL_OK_ERRORS:
@@ -794,7 +794,7 @@ class ChatEngine:
         self._append(conn, channel_id, "assistant", text)
         outcome = outcomesmod.heuristic(text, trace)
         outcome_id = outcomesmod.record(conn, channel_id, outcome)
-        # item 15: a weak/error turn arms the escalate tier for the
+        # a weak/error turn arms the escalate tier for the
         # next one (only while PA_ROUTER_ESCALATE is on)
         if outcome == "low_confidence" and \
                 getattr(self.s, "router_escalate", False):
@@ -804,7 +804,7 @@ class ChatEngine:
             except Exception:
                 pass
         self._grade_later(channel_id, outcome_id, text)
-        # K3: a clean ok turn with >=3 tool steps may yield a skill
+        # a clean ok turn with >=3 tool steps may yield a skill
         # proposal — queued as a held skill_save, never written here
         if outcome == "ok":
             try:

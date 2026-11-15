@@ -1,4 +1,4 @@
-"""K3 acceptance: skill auto-extraction + retrieval.
+"""acceptance: skill auto-extraction + retrieval.
 
 A clean 'ok' turn with >=3 successful tool steps asks the fast model
 for a reusable skill; the proposal is deduped (slug + keyword overlap

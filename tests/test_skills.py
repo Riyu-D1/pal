@@ -1,4 +1,4 @@
-"""Item 6: skills library — vault-backed when configured, SQLite
+"""skills library — vault-backed when configured, SQLite
 otherwise; slugged names can never escape Skills/."""
 
 import os
