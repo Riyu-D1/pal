@@ -58,8 +58,7 @@ Sensible extras, all optional: `PA_SECRETS_KEY`
 
 ```sh
 . .venv/bin/activate          # or: python3 -m venv .venv && pip install -r requirements.txt
-set -a; . ./.env; set +a      # pal never reads .env itself
-python -m pa migrate        # creates ./data/pa.db, runs all migrations
+python -m pa migrate        # reads .env itself (set PA_ENV_FILE for another path)
 python -m pa doctor         # required checks must all pass
 python -m pa create-owner   # pick web-UI username + password
 python -m pa serve &        # web + worker + scheduler + discord bot

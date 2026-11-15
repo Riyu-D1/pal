@@ -1,4 +1,4 @@
-"""final-4 E1: improvement archive — lineage, promote/revert,
+"""improvement archive — lineage, promote/revert
 Track A candidate gating."""
 
 import unittest

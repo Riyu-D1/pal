@@ -1,4 +1,4 @@
-"""final-1 P1 — account-owner registry."""
+"""account-owner registry."""
 import tempfile
 import unittest
 

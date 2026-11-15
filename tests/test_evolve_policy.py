@@ -1,4 +1,4 @@
-"""Evolve item 11: protected-path policy helper."""
+"""protected-path policy helper."""
 
 import unittest
 
@@ -13,11 +13,11 @@ class TestPolicy(unittest.TestCase):
             "pa/passwords.py", "pa/egress.py", "pa/untrusted.py",
             "pa/discordbot.py", "pa/webapp.py",
             "pa/evolve/policy.py",
-            "pa/evolve/evaluator.py",          # final-4 E2
+            "pa/evolve/evaluator.py",
             ".github/workflows/ci.yml",
             "deploy/pa.service", "deploy/pa-watchdog.sh",
             ".env", ".env.example",
-            "evals/new.json",                  # final-4 E2
+            "evals/new.json",
             "evals/heldout/h.json",
         ]
         for p in bad:

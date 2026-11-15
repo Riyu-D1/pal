@@ -1,4 +1,4 @@
-"""final-2 T2: calendar triage + meeting prep (PA_CAL_TRIAGE).
+"""calendar triage + meeting prep (PA_CAL_TRIAGE).
 
 'cal-triage' system job (seeded disabled, every 5 min). For every
 event starting within PREP_MINUTES pal posts a prep card: the event
@@ -8,7 +8,7 @@ proposal card with move/decline draft text. Nothing ever writes to
 the calendar — events come read-only from pa.calsource (Composio
 googlecalendar first, the legacy GCalClient as fallback).
 
-final-5 F2: the same tick also carries a cheaper "meeting soon" ping
+the same tick also carries a cheaper "meeting soon" ping
 (PA_CAL_SOON, leads PA_CAL_SOON_LEADS, default 15m/5m) that runs even
 when full prep is off and routes through notify() — deduped per
 event+lead, held during quiet hours.
@@ -95,7 +95,7 @@ def _last_conflict_card(conn) -> float:
         return 0.0
 
 
-# -- final-5 F2: meeting-soon alerts --------------------------------------
+# -- meeting-soon alerts --------------------------------------
 
 def soon_leads(settings) -> list:
     """Configured lead minutes, ascending (default 15 and 5)."""

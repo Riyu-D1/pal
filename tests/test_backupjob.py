@@ -1,4 +1,4 @@
-"""Item 27: scheduled encrypted backups."""
+"""scheduled encrypted backups."""
 
 import os
 import unittest

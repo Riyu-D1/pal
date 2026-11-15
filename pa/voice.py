@@ -155,7 +155,7 @@ def pcm_to_stereo48k(pcm: bytes, in_rate: int, in_channels: int = 1,
 
 
 def to_pcm48k_stereo(audio: bytes, in_args=(), ffmpeg="ffmpeg") -> bytes:
-    """Provider audio -> s16le stereo 48 kHz (V2 playback format).
+    """Provider audio -> s16le stereo 48 kHz (in-proc playback format).
     Raw s16le input (in_args '-f s16le -ar R -ac 1') resamples
     in-process — no ffmpeg; containers take one ffmpeg decode."""
     ia = list(in_args or ())
@@ -387,7 +387,7 @@ def tts_order(s):
 
 
 def _record_usage(s, name: str, n: int = 1, scope: str = "owner-chat"):
-    """Best-effort daily counter in voice_usage for /status; B2 also
+    """Best-effort daily counter in voice_usage for /status; it also
     charges the budget ledger (tts_chars:<p>, stt_sec) under scope."""
     try:
         from . import db as dbmod
@@ -414,7 +414,7 @@ def _record_usage(s, name: str, n: int = 1, scope: str = "owner-chat"):
         pass
 
 
-# V7: per-provider daily synthesised-char budgets. Cloudflare's free
+# per-provider daily synthesised-char budgets. Cloudflare's free
 # ~10k neurons/day is roughly 3.6k spoken chars; Gemini TTS 429s under
 # call load, so calls reserve it for voice notes unless configured.
 _TTS_CHAR_DEFAULTS = {"cloudflare": 3000, "gemini": 1500,
@@ -489,7 +489,7 @@ def stt_states(s, env):
 
 def call_tts_order(s):
     """PA_CALL_TTS_ORDER — the in-call provider preference. Calls get
-    their own order (V7 default azure,cloudflare,gemini: Gemini TTS
+    their own order (default azure,cloudflare,gemini: Gemini TTS
     429s under call load so it's last — it's the voice-note provider)
     because ONE provider is locked per call — mixing voices mid-call
     sounds glitchy."""
@@ -562,7 +562,7 @@ def synthesize(s, env, text, style=None, convert=None, order=None,
 
 def synthesize_pcm(s, env, text, order=None, convert=None,
                    scope="owner-chat"):
-    """V2 in-proc call playback: -> (s16le stereo 48 kHz PCM, provider).
+    """in-proc call playback: -> (s16le stereo 48 kHz PCM, provider).
 
     Raw-PCM providers (Gemini l16, Live) resample via audioop — no
     ffmpeg at all; mp3/wav providers take ONE ffmpeg decode here at
@@ -628,7 +628,7 @@ class CallTTS:
         self._order = list(order or call_tts_order(s))
         self._convert = convert
         # 'ogg' (voice-note shape, ffmpeg playback) | 'pcm' (s16le
-        # stereo 48 kHz — the V2 in-proc CallAudioSource path)
+        # stereo 48 kHz — the in-proc CallAudioSource path)
         self._fmt = fmt
         self._ext = ".pcm" if fmt == "pcm" else ".ogg"
         self._cache_dir = cache_dir if cache_dir is not None else (
@@ -637,7 +637,7 @@ class CallTTS:
         self._provider = None          # locked provider name
         self._lock = threading.Lock()
         self._path_locks = {}          # cache path -> write lock
-        self.budget_scope = "call"     # B2: calls charge the call pot
+        self.budget_scope = "call"     # calls charge the call pot
 
     # -- provider lock ------------------------------------------------
     @property
@@ -651,7 +651,7 @@ class CallTTS:
             return False
         if _cool_until(name) > time.monotonic():
             return False
-        # V7: a provider whose daily char budget is spent is skipped
+        # a provider whose daily char budget is spent is skipped
         # before the lock, not after a failed synth
         left = tts_chars_remaining(self.s, self.env, name)
         if left is not None and left <= 0:

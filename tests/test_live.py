@@ -1,4 +1,4 @@
-"""final-1 V4: Gemini Live engine — fake-WebSocket tests for setup
+"""Gemini Live engine — fake-WebSocket tests for setup
 shape, audio framing, interrupted flush, toolCall -> toolResponse,
 resumption reconnect, and pipeline fallback on 1011/429."""
 
@@ -323,7 +323,7 @@ class TestConfig(unittest.TestCase):
 
 
 class TestLiveBudget(unittest.TestCase):
-    """final-5 F3: live_min reserve/settle around a Live run."""
+    """live_min reserve/settle around a Live run."""
 
     def _env(self, **kw):
         from tests.helpers import TmpEnv
@@ -386,7 +386,7 @@ class TestLiveBudget(unittest.TestCase):
 
     def test_off_flag_means_no_gate(self):
         # call.py only builds LiveBudget when settings.live_budget —
-        # default off: identical to final-4 (no ledger rows written)
+        # default off: no ledger rows written
         env = self._env()
         self.assertFalse(env.settings.live_budget)
 

@@ -1,4 +1,4 @@
-"""A1: secure password/OTP capture — modal, one-time HTTPS form,
+"""secure password/OTP capture — modal, one-time HTTPS form
 DM paste redaction, and removal of the plaintext command path.
 
 Everything external is faked: the Discord REST layer is a recording

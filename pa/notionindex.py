@@ -1,5 +1,5 @@
-"""A4: incremental read-only indexing of the owner's Notion into
-recall FTS + the knowledge graph (final-5, PA_NOTION_INDEX, default
+"""incremental read-only indexing of the owner's Notion into
+recall FTS + the knowledge graph (PA_NOTION_INDEX, default
 off; 'notion-index' sysjob seeded disabled, hourly, migration 46).
 
 Reads pages through the existing 'notion' connection (MCP or Composio

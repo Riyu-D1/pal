@@ -1,4 +1,4 @@
-"""final-2 T2: calendar triage — prep cards within 30m, quiet-hours
+"""calendar triage — prep cards within 30m, quiet-hours
 suppression of DMs, conflict proposals that never touch the calendar
 (asserted with a recording fake client)."""
 
@@ -132,7 +132,7 @@ class SoonBot:
 
 
 class TestCalSoon(unittest.TestCase):
-    """final-5 F2: PA_CAL_SOON meeting-soon pings on the same tick."""
+    """PA_CAL_SOON meeting-soon pings on the same tick."""
 
     def setUp(self):
         self.env = TmpEnv(PA_CAL_SOON="true")

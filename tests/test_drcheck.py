@@ -1,4 +1,4 @@
-"""final-4 R1: dr-check — good/stale/wrong-key backups, red-only DM."""
+"""dr-check — good/stale/wrong-key backups, red-only DM."""
 
 import os
 import time

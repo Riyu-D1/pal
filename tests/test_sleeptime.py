@@ -1,4 +1,4 @@
-"""final-2 M2: sleeptime curator — repeated facts promote to the
+"""sleeptime curator — repeated facts promote to the
 human block via a card, duplicate memories become delete proposals,
 stale world lines demote (versioned), twice-successful paths become
 skill proposals. Nothing deletes without approval."""

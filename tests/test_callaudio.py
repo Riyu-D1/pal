@@ -1,4 +1,4 @@
-"""final-1 V2: gapless in-process playback — CallAudioSource frame
+"""gapless in-process playback — CallAudioSource frame
 sizing, 24k->48k resample lengths, clear-on-stop, drain timing with a
 fake clock, no ffmpeg at play time."""
 

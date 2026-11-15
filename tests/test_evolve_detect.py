@@ -1,4 +1,4 @@
-"""Evolve item 4: evolve_items + the evolve-detect gap detector."""
+"""evolve_items + the evolve-detect gap detector."""
 
 import unittest
 

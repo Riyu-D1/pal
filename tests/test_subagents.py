@@ -1,4 +1,4 @@
-"""S1 acceptance: budgeted sub-agents via delegate().
+"""acceptance: budgeted sub-agents via delegate().
 
 Children are ordinary worker tasks bound to sub:<role> assistants
 (tools allowlist enforced by ToolContext), per-child budgets in the

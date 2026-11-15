@@ -1,4 +1,4 @@
-"""Evolve item 3: deep /healthz — real ok, 503 + short codes on
+"""deep /healthz — real ok, 503 + short codes on
 failure, nothing sensitive in the body."""
 
 import datetime

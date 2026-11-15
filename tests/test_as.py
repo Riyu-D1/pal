@@ -1,4 +1,4 @@
-"""Item 24: /as per-channel assistant switching."""
+"""/as per-channel assistant switching."""
 
 import unittest
 

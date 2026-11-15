@@ -213,7 +213,7 @@ class TestCallTTS(unittest.TestCase):
         self.assertIsNone(tts.say("hi"))
         self.assertIsNone(tts.say_cached("hi"))
 
-    # -- V7 daily char budgets -----------------------------------------
+    # -- daily char budgets --------------------------------------------
     def test_spent_provider_skipped_before_lock(self):
         """Azure's daily chars are gone -> the call locks cloudflare
         without ever trying azure."""
@@ -952,7 +952,9 @@ class TestCallNotifyAndDiag(unittest.TestCase):
     def test_call_diag_needs_token(self):
         import os
         from pa import __main__ as pamain
-        with unittest.mock.patch.dict(os.environ, {}, clear=True):
+        with unittest.mock.patch.dict(
+                os.environ,
+                {"PA_ENV_FILE": "/nonexistent/.env"}, clear=True):
             import io, contextlib
             err = io.StringIO()
             with contextlib.redirect_stderr(err):
@@ -1083,7 +1085,7 @@ class TestBotSide(unittest.TestCase):
     def test_voice_toggle(self):
         conn = self.env.conn()
         self.addCleanup(conn.close)
-        # final-6: unset -> auto is the default mode
+        # unset -> auto is the default mode
         self.assertIn("auto", self.bot.execute(conn, ["voice"]))
         self.assertIn("ON", self.bot.execute(conn, ["voice", "on"]))
         self.assertEqual(

@@ -1,4 +1,4 @@
-"""final-2 G1: standing goals — the things pal works on proactively.
+"""standing goals — the things pal works on proactively.
 
 A goal is owner-visible by design (/goals shows it): title, why,
 success criteria, cadence, which read sources a tick may use, status,

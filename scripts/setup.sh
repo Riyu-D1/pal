@@ -106,7 +106,7 @@ else
 fi
 
 # --- 3. migrate + doctor ----------------------------------------------
-set -a; . ./.env 2>/dev/null || true; set +a
+# `python -m pa` auto-loads ./.env itself — no manual sourcing needed.
 say "migrating database"
 "$PY" -m pa migrate >/dev/null
 say "doctor"
@@ -116,8 +116,8 @@ RC=${RC:-0}
 if [ "$CHECK_ONLY" = 0 ] && [ "$RC" = 0 ]; then
   cat <<'NEXT'
 
-next (pal does NOT read .env by itself — load it into your shell first):
-  0. . .venv/bin/activate && set -a && . ./.env && set +a
+next (pal reads ./.env itself — just activate the venv):
+  0. . .venv/bin/activate
   1. python -m pa create-owner     # web-UI login (username+password)
   2. python -m pa serve            # http://127.0.0.1:8080 + Discord bot
   3. curl http://127.0.0.1:8080/healthz

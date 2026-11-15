@@ -73,9 +73,9 @@ class ChatToolContext:
         # set by execute_approved: the owner's Approve IS the gate, so a
         # tool's internal risk checks must not queue a second approval
         self.approved_replay = False
-        self.tainted = False        # P4: a fenced payload flowed through
+        self.tainted = False        # a fenced payload flowed through
         self.taint_source = ""      # first untrusted source seen
-        # final-2 G2: None = whole catalogue; a set scopes the turn to
+        # None = whole catalogue; a set scopes the turn to
         # those tool names (proactive ticks get read-tools-only).
         self.tool_allow = tool_allow
         self._fetch = fetch_impl
@@ -104,7 +104,7 @@ class ChatToolContext:
         turns never wait: the row is a 'job_action' and 'pending' comes
         back at once so the turn can move on.
 
-        `decision` (P3 pa.policy.Decision) rides into the approval
+        `decision` (pa.policy.Decision) rides into the approval
         payload so the card can say why; an owner-account hard-gate
         also skips allow rules entirely — a standing rule must never
         cover writes/sends on the owner's accounts."""
@@ -980,7 +980,7 @@ CHAT_TOOLS = {
                            why=("string", "what the owner wanted", 1)),
         "fn": lambda c, a: _need_capability(c, a),
     },
-    # --- final-2: goals / activity / memory OS / triage (docs/FEATURES.md)
+    # --- goals / activity / memory OS / triage (docs/FEATURES.md)
     # Each carries "flag" — hidden from the prompt and refused in run()
     # while its PA_* setting is off, so flagged-off == base branch.
     "goal_add": {
@@ -1219,14 +1219,14 @@ WORKSPACE_TOOLS = frozenset({
     "file_list", "file_read", "file_version", "file_delete",
 })
 
-# K1 made tools — listed only while PA_MADETOOLS is on
+# made tools — listed only while PA_MADETOOLS is on
 MADE_TOOLS = frozenset({"tool_make", "tool_run", "tool_list"})
 
-# K2 integration builder — listed only while PA_INTEGRATIONS is on
+# integration builder — listed only while PA_INTEGRATIONS is on
 INTEGRATION_TOOLS = frozenset({
     "integration_build", "integration_key", "integration_list"})
 
-# S2 research reports — listed only while PA_RESEARCH is on
+# research reports — listed only while PA_RESEARCH is on
 RESEARCH_TOOLS = frozenset({"research"})
 
 
@@ -1428,7 +1428,7 @@ def _jina_request(url, settings, env):
 
 
 def _feedback(ctx, args):
-    """Item 2: the owner (or the model reading clear praise/blame)
+    """the owner (or the model reading clear praise/blame)
     rates the last answer -> outcome row + incident. Never gated."""
     from .evolve import outcomes as outcomesmod
     rating = str(args.get("rating") or "").strip().lower()
@@ -1442,7 +1442,7 @@ def _feedback(ctx, args):
 
 
 def _need_capability(ctx, args):
-    """Item 6: pal hit a real gap -> open/dedupe an evolve_item and
+    """pal hit a real gap -> open/dedupe an evolve_item and
     (when PA_EVOLVE + a brain are available) draft a plan. Attended
     or unattended, this never waits on the owner."""
     from .evolve import plan as planmod
@@ -1585,7 +1585,7 @@ def needs_approval(name: str, args: dict) -> bool:
     return bool(spec.get("approval"))
 
 
-# L1: always-prompted core when PA_TOOL_TOPK prunes the catalogue —
+# always-prompted core when PA_TOOL_TOPK prunes the catalogue
 # memory/vault/search/owner-question/todo/delegate stay, plus the
 # meta-tool that lists what was hidden.
 _TOPK_CORE = frozenset({
@@ -1600,7 +1600,7 @@ def _tool_keywords(text: str) -> set:
 
 
 def _flag_on(settings, spec: dict) -> bool:
-    """final-2 flags: a tool carrying "flag" exists only while its
+    """flag gating: a tool carrying "flag" exists only while its
     PA_* setting is on — hidden from the prompt AND refused in run(),
     so flags-off is byte-identical to the base branch."""
     flag = spec.get("flag")
@@ -1611,10 +1611,10 @@ def prompt_lines(settings=None, conn=None, query: str = "") -> str:
     """Compact tool list for the ReAct system prompt. The browse_*
     tools are listed only while the computer is enabled — a tool that
     can only ever answer not_configured would just teach the model to
-    try it. Evolve's prompt snippets (item 8) append at the end when
+    try it. Evolve's prompt snippets append at the end when
     a conn is given.
 
-    L1: PA_TOOL_TOPK>0 keeps the core set + the top-k tools by
+    PA_TOOL_TOPK>0 keeps the core set + the top-k tools by
     keyword overlap with the owner's message; the rest collapse into
     a tools_more hint instead of ~17k chars of schemas."""
     computer_on = bool(settings and
@@ -1758,7 +1758,7 @@ def run(ctx: ChatToolContext, name: str, args: dict) -> dict:
                 getattr(ctx.s, "memory_save_approval", False) and \
                 not ctx.approved_replay:
             gated = True
-        # P3: the policy floor runs before the legacy gate. 'allow'
+        # the policy floor runs before the legacy gate. 'allow'
         # falls through to the existing approval UX (only tightens,
         # never loosens); 'approve'/'pending' take the card/queue.
         if getattr(ctx.s, "policy_engine", True):
@@ -1774,7 +1774,7 @@ def run(ctx: ChatToolContext, name: str, args: dict) -> dict:
             if out is not None:
                 return out
         from . import untrusted as _untr
-        _untr.bind(ctx)   # P4: fenced results taint this turn
+        _untr.bind(ctx)   # fenced results taint this turn
         try:
             return spec["fn"](ctx, args or {})
         finally:
@@ -1788,7 +1788,7 @@ def execute_approved(ctx: ChatToolContext, name: str, args: dict) -> dict:
     Never creates another approval row — the owner's Approve IS the
     gate."""
     if name == "tool_register":
-        # K1: held first-registration from an unattended tool_make —
+        # held first-registration from an unattended tool_make
         # carries generated code/tests in args
         ctx.approved_replay = True
         try:
@@ -1797,7 +1797,7 @@ def execute_approved(ctx: ChatToolContext, name: str, args: dict) -> dict:
         finally:
             ctx.approved_replay = False
     if name == "integration_register":
-        # K2: held first-registration from integration_build
+        # held first-registration from integration_build
         ctx.approved_replay = True
         try:
             from . import integrations
@@ -2727,7 +2727,7 @@ def _self_update(ctx, args):
         return out
     return selfupdate.apply(
         health_seconds=ctx.s.evolve_health_seconds,
-        port=ctx.s.port)
+        port=ctx.s.port, settings=ctx.s)
 
 
 def _page_publish(ctx, args):
@@ -2779,7 +2779,7 @@ def _code_task(ctx, args):
 
 
 def _delegate(ctx, args):
-    """S1: budgeted sub-agent tasks (pa/subagents.py); flag off keeps
+    """budgeted sub-agent tasks (pa/subagents.py); flag off keeps
     the original queued-inbox behaviour."""
     if getattr(ctx.s, "subagents", False):
         from . import subagents as submod
@@ -3148,7 +3148,7 @@ def _job_set(ctx, args):
 
 
 # ---------------------------------------------------------------------------
-# final-2 G1: standing goals (docs/FEATURES.md). Writes are "approval":
+# standing goals (docs/FEATURES.md). Writes are "approval":
 # True — the owner reviews each one; unattended ticks queue them as
 # job_actions like any other gated write.
 
@@ -3255,7 +3255,7 @@ def _goal_report(ctx, args):
             "queued": queued}
 
 
-# --- final-2 J1: multi-day projects -----------------------------------
+# --- multi-day projects -----------------------------------
 
 def _project_start(ctx, args):
     from . import projects as projmod
@@ -3300,7 +3300,7 @@ def _project_stop(ctx, args):
     return {"project_id": p["id"], "state": "stopped"}
 
 
-# --- final-2 G4: sentence -> automation proposal ------------------------
+# --- sentence -> automation proposal ------------------------
 
 def _automation_propose(ctx, args):
     from . import automation
@@ -3336,7 +3336,7 @@ def _automation_apply(ctx, args):
     return out
 
 
-# --- final-2 M1: pinned memory blocks -----------------------------------
+# --- pinned memory blocks -----------------------------------
 
 def _memory_block_set(ctx, args):
     from . import memblocks
@@ -3360,7 +3360,7 @@ def _memory_block_set(ctx, args):
             "chars": len(b["content"])}
 
 
-# --- final-2 M3: cross-source recall ------------------------------------
+# --- cross-source recall ------------------------------------
 
 def _recall(ctx, args):
     from . import recall as recallmod

@@ -1,4 +1,4 @@
-"""Item 14: credential vault + browse_fill_secret."""
+"""credential vault + browse_fill_secret."""
 
 import unittest
 
@@ -120,7 +120,7 @@ class TestFill(Base):
 
 class TestCommand(Base):
     def test_credentials_command(self):
-        # A1: with secure capture on (default) the args path seals
+        # with secure capture on (default) the args path seals
         # only while a capture is pending — see test_secretcapture.py
         # for the full matrix (modal, form, paste-redaction).
         from pa import discordbot, secretform

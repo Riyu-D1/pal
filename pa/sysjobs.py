@@ -20,12 +20,12 @@ log = logging.getLogger("pa.sysjobs")
 _NAMES = ("inbox-watch", "morning-briefing", "daily-journal",
           "monitor-tick", "scheduled-backup", "evolve-detect",
           "evolve-digest", "evolve-reflect",
-          # final-2 (docs/FEATURES.md)
+          # (docs/FEATURES.md)
           "proactive-tick", "recall-index", "kg-build",
           "cal-triage",
-          # final-4 (docs/DR.md)
+          # (docs/DR.md)
           "dr-check", "evolve-practice",
-          # final-5 (docs/FEATURES.md)
+          # (docs/FEATURES.md)
           "mail-inbound", "coursework-watch", "notion-index")
 
 
@@ -116,7 +116,7 @@ def dm_and_voice(bot, text: str, voice: bool = True,
     """Post text + (best-effort) a voice note of it to the owner's DM —
     the standard 'reach the owner' path for system jobs."""
     if getattr(bot.s, "notify_v2", False) and not target:
-        # final-2 N1: all owner DM traffic routes through the
+        # all owner DM traffic routes through the
         # notifier (quiet-hour batching, dedupe, per-hour cap).
         from . import notify
         return notify.notify(bot, None, "dm", "normal", text)
@@ -126,7 +126,7 @@ def dm_and_voice(bot, text: str, voice: bool = True,
     bot.api.post_message(dm, text[:1900])
     if voice and bot._voice is not None:
         try:
-            # final-6: proactive voice obeys the same rule as replies —
+            # proactive voice obeys the same rule as replies
             # voice_notes 'on' always, 'off' never, 'auto' when busy
             from . import busy as busymod
             if busymod.voice_should_send(bot):

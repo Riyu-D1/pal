@@ -194,7 +194,7 @@ def tool_read_only(slug: str, item: dict, toolkit: str = "") -> bool:
 
 def bump_usage(conn, scope: str = "owner-chat") -> int:
     """Increment this month's call counter; returns the new count.
-    B2 also charges the budget ledger under the caller's scope."""
+    also charges the budget ledger under the caller's scope."""
     m = _month()
     conn.execute(
         "INSERT INTO composio_usage(month, calls) VALUES(?,1)"

@@ -1,4 +1,4 @@
-"""Item 25: shareable Markdown pages."""
+"""shareable Markdown pages."""
 
 import unittest
 

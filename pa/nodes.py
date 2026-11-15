@@ -1,4 +1,4 @@
-"""final-3 X1: node registry + dispatch (docs/NODES.md).
+"""node registry + dispatch (docs/NODES.md).
 
 pal's "hands": small remote agents (the Moto E5 phone over an SSH
 tunnel, the computer VM) that run pal-made or built-in capabilities on
@@ -42,7 +42,7 @@ _CAP_POLICY = {
     "ping_http":    ("read", "pal"),
     "file_get":     ("read", "pal"),
     "file_put":     ("write", "pal"),
-    "run_tool":     ("write", "pal"),   # registration (K1) was the gate
+    "run_tool":     ("write", "pal"),   # registration was the gate
     "browse":       ("read", "pal"),
     "screenshot":   ("read", "pal"),
     "read_url_js":  ("read", "pal"),
@@ -160,7 +160,7 @@ class NodeClient:
 
 def configured(s) -> list:
     """Node names that are set up: PA_NODES + 'computer' when the
-    computer agent has its own URL (X4)."""
+    computer agent has its own URL."""
     names = sorted((s.nodes or {}).keys())
     if getattr(s, "computer_url", "") and "computer" not in s.nodes:
         names.append("computer")

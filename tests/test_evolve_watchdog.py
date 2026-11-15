@@ -1,4 +1,4 @@
-"""Evolve item 14: watchdog — one restart + one DM per outage."""
+"""watchdog — one restart + one DM per outage."""
 
 import unittest
 
@@ -57,6 +57,47 @@ class TestWatchdog(unittest.TestCase):
         src = inspect.getsource(watchdog)
         for tok in ("xoxb-", "ghp_", "sk-", "AIza", "password="):
             self.assertNotIn(tok, src)
+
+
+class TestSystemdArgv(unittest.TestCase):
+    def test_user_scope(self):
+        self.assertEqual(watchdog.systemd_argv("user", "pa"),
+                         ["systemctl", "--user", "restart", "pa"])
+
+    def test_system_scope(self):
+        self.assertEqual(watchdog.systemd_argv("system", "pa"),
+                         ["systemctl", "restart", "pa"])
+
+    def test_custom_unit(self):
+        self.assertEqual(watchdog.systemd_argv("system", "pal-x"),
+                         ["systemctl", "restart", "pal-x"])
+
+    def test_restart_runs_argv(self):
+        calls = []
+
+        def runner(argv, **kw):
+            calls.append(argv)
+            return type("P", (), {"returncode": 0})()
+        self.assertTrue(
+            watchdog.systemd_restart(runner, "system", "pa2"))
+        self.assertEqual(calls,
+                         [["systemctl", "restart", "pa2"]])
+
+    def test_loop_uses_settings_scope(self):
+        env = TmpEnv(PA_SYSTEMD_SCOPE="system",
+                     PA_SYSTEMD_UNIT="pal-svc")
+        calls = []
+
+        def runner(argv, **kw):
+            calls.append(argv)
+            return type("P", (), {"returncode": 0})()
+        watchdog.loop(
+            env.settings, probe=Seq([False] * 20),
+            runner=runner,
+            notify=lambda t: None,
+            interval=0.001, fail_after=0.004, max_loops=8)
+        self.assertEqual(calls,
+                         [["systemctl", "restart", "pal-svc"]])
 
 
 if __name__ == "__main__":

@@ -1,4 +1,4 @@
-"""final-2 G4: 'when X happens, do Y' -> one artefact proposal —
+"""'when X happens, do Y' -> one artefact proposal
 phrasing -> artefact type, the single approval card, Approve creates
 it, deny creates nothing."""
 

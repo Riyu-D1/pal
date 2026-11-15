@@ -1,4 +1,4 @@
-"""final-2 G3: the local activity feed — record/list/render, the
+"""the local activity feed — record/list/render, the
 /activity card, pending-approval buttons and the 'while you were
 away' greeting."""
 

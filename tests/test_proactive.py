@@ -1,4 +1,4 @@
-"""final-2 G2: proactive read-only tick — flags, quiet hours, due
+"""proactive read-only tick — flags, quiet hours, due
 goals, the read-only tool scope, drafts -> approval cards, budget
 stop and the goal next_action update."""
 

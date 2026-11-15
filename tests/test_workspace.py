@@ -1,4 +1,4 @@
-"""W1 acceptance: workspace CRUD + versions + cap + traversal +
+"""acceptance: workspace CRUD + versions + cap + traversal +
 chat-tool gating + /files."""
 
 import os

@@ -1,4 +1,4 @@
-"""final-2 M2: the sleeptime curator — a deterministic nightly pass
+"""the sleeptime curator — a deterministic nightly pass
 run from evolve-reflect (PA_SLEEPTIME, needs PA_MEMORY_BLOCKS).
 
 - repeated owner-fact content seen across memories promotes into the

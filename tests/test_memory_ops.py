@@ -1,4 +1,4 @@
-"""Item 5: memory_forget / memory_correct / owner_fact gating,
+"""memory_forget / memory_correct / owner_fact gating
 PA_MEMORY_SAVE_APPROVAL, auto-propose, and the /memory command."""
 
 import json

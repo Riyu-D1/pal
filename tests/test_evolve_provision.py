@@ -1,4 +1,4 @@
-"""Evolve item 16: owner-approved provider setup."""
+"""owner-approved provider setup."""
 
 import inspect
 import unittest

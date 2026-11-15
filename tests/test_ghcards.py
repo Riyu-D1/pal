@@ -1,4 +1,4 @@
-"""A6: GitHub CI/PR webhook events -> owner-DM cards, no agent turn."""
+"""GitHub CI/PR webhook events -> owner-DM cards, no agent turn."""
 
 import json
 import unittest

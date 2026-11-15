@@ -1,5 +1,5 @@
-"""A3: coursework layer — Google Classroom / Docs reads, a deadline
-monitor, and PDF -> vault notes (final-5, PA_COURSEWORK, default off).
+"""coursework layer — Google Classroom / Docs reads, a deadline
+monitor, and PDF -> vault notes (PA_COURSEWORK, default off).
 
 Toolkits are discovered AT RUNTIME: we look at the connections table
 for a connected Composio account whose provider/meta toolkit smells

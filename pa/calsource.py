@@ -1,4 +1,4 @@
-"""final-6: ONE calendar read path for the background jobs.
+"""ONE calendar read path for the background jobs.
 
 Production connects the owner's Google Calendar through Composio
 ('/connect googlecalendar'); the GMAIL_* OAuth env grant usually

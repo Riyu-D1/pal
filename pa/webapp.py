@@ -361,7 +361,7 @@ class App:
         return self._route(req)
 
     def _healthz(self) -> Response:
-        """Deep public health check (docs/EVOLVE.md item 3) — short
+        """Deep public health check (docs/EVOLVE.md) — short
         codes only, 503 with {"ok": false, "failed": [...]} on
         failure. No secrets, no DATA_DIR paths."""
         from . import health
@@ -414,7 +414,7 @@ class App:
                 dbmod.audit(conn, "webhook", "bad_signature", name)
                 return json_response({"error": "bad signature"},
                                      "401 Unauthorized")
-            # A6: a 'github'/'ci' hook renders CI-ish events as owner
+            # a 'github'/'ci' hook renders CI-ish events as owner
             # DM cards — no agent turn unless the owner opted in.
             if name in ("github", "ci") and not getattr(
                     self.s, "github_hook_agent", False):
@@ -437,7 +437,7 @@ class App:
         finally:
             conn.close()
 
-    # -- A1 secret-capture form ------------------------------------------------
+    # -- secret-capture form ---------------------------------------------------
     _SEC_HEADERS = [
         ("Cache-Control", "no-store"),
         ("X-Content-Type-Options", "nosniff"),

@@ -1,4 +1,4 @@
-"""Evolve item 19: /usage evolve section + settings whitelist."""
+"""/usage evolve section + settings whitelist."""
 
 import unittest
 

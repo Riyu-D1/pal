@@ -126,7 +126,7 @@ def provider_for(app: str, account: str = "") -> str:
 
 
 def owner_kind_for(provider: str) -> str:
-    """P1: which side of the approval boundary a connection is on.
+    """which side of the approval boundary a connection is on.
     'pal'-labelled accounts are pal's own; everything else is the
     owner's — fail closed."""
     return "pal" if split_account(provider)[1] == "pal" else "owner"

@@ -1,4 +1,4 @@
-"""final-1 V3: receive-path fixes — RTP padding strip before DAVE,
+"""receive-path fixes — RTP padding strip before DAVE
 Opus silence passthrough, the context-aware short-reply filter, and
 the snappier end-of-speech tails."""
 

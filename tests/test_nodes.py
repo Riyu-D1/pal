@@ -1,4 +1,4 @@
-"""final-3 X1: node registry + dispatch — fake HTTP node in-process.
+"""node registry + dispatch — fake HTTP node in-process.
 
 Covers: config parsing, client roundtrip, auth failure, circuit
 breaker, capability routing, queueing when no node is healthy, and the
@@ -382,7 +382,7 @@ class FakeComputer:
 
 
 class TestComputerNode(unittest.TestCase):
-    """X4: the existing computer agent registers as node 'computer'."""
+    """the existing computer agent registers as node 'computer'."""
 
     def setUp(self):
         self.comp = FakeComputer()
@@ -456,7 +456,7 @@ class TestComputerNode(unittest.TestCase):
 
 
 class TestComputerNodeFinal5(unittest.TestCase):
-    """final-5 F4: PA_COMPUTER_URL alone registers node 'computer';
+    """PA_COMPUTER_URL alone registers node 'computer'
     the RemoteComputer tunnel keeps working unchanged."""
 
     def setUp(self):

@@ -1,4 +1,4 @@
-"""final-2 G4: 'when X happens, do Y' -> ONE concrete artefact
+"""'when X happens, do Y' -> ONE concrete artefact
 proposal (monitor | schedule | webhook + action template), shown as
 a single approval card and created only on Approve.
 

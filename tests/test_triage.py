@@ -1,4 +1,4 @@
-"""final-2 T1: inbox triage — pal-DB buckets, local reply drafts,
+"""inbox triage — pal-DB buckets, local reply drafts
 and the hard guarantee that the unattended path never calls a Gmail
 write (asserted against a fake client that records every write)."""
 

@@ -1,4 +1,4 @@
-"""Item 15: generate_image (Cloudflare / Pollinations)."""
+"""generate_image (Cloudflare / Pollinations)."""
 
 import base64
 import unittest

@@ -1,4 +1,4 @@
-"""A2: mail-inbound sysjob (pal's own Gmail -> owner turns, allowlist
+"""mail-inbound sysjob (pal's own Gmail -> owner turns, allowlist
 only) + PA_NOTIFY_PHONE phone dispatch for high/urgent notifications.
 
 All external surfaces are faked — no Gmail, node or Discord traffic.

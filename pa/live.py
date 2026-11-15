@@ -1,9 +1,9 @@
-"""Gemini Live call engine (V4, PA_CALL_ENGINE=auto|live|pipeline).
+"""Gemini Live call engine (PA_CALL_ENGINE=auto|live|pipeline).
 
 One BidiGenerateContent WebSocket session replaces the whole
 STT→LLM→TTS pipeline: Discord audio goes in as 16 kHz mono PCM,
 model audio comes out as 24 kHz PCM and lands straight in the
-CallAudioSource (V2) — the model speaks itself, endpointing and
+CallAudioSource — the model speaks itself, endpointing and
 interruption are server-side, and ``serverContent.interrupted``
 maps to the same queue-clear barge-in the pipeline uses.
 
@@ -61,7 +61,7 @@ FAST_TOOL_DECLS = [
 
 
 # ---------------------------------------------------------------------------
-# audio conversion (stdlib audioop — see V2)
+# audio conversion (stdlib audioop — same helpers as callconv)
 
 def _audioop():
     import warnings
@@ -450,7 +450,7 @@ class LiveEngine:
 
 
 # ---------------------------------------------------------------------------
-# final-5 F3: live_min budget gate (PA_LIVE_BUDGET)
+# live_min budget gate (PA_LIVE_BUDGET)
 
 class LiveBudget:
     """Reserve `live_min` under the 'call' scope before a Live socket

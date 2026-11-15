@@ -1,4 +1,4 @@
-"""Evolve item 9: the offline eval harness itself."""
+"""the offline eval harness itself."""
 
 import json
 import os

@@ -1,4 +1,4 @@
-"""final-2 N1: notifier — quiet-hour holds flush as one batch,
+"""notifier — quiet-hour holds flush as one batch
 6h dedupe, per-hour cap, urgent passthrough, dm_and_voice routing
 behind PA_NOTIFY_V2."""
 

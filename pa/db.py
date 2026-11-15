@@ -893,7 +893,7 @@ def _m20(conn):
 
 @migration(21)
 def _m21(conn):
-    """evolve item 1: scrubbed failure-signal log (docs/EVOLVE.md).
+    """scrubbed failure-signal log (docs/EVOLVE.md).
     Written by chat/worker/router/sysjob hooks; read by evolve-detect."""
     conn.execute(
         "CREATE TABLE IF NOT EXISTS incidents("
@@ -917,7 +917,7 @@ def _m21(conn):
 
 @migration(22)
 def _m22(conn):
-    """evolve item 2: one cheap outcome row per attended turn."""
+    """one cheap outcome row per attended turn."""
     conn.execute(
         "CREATE TABLE IF NOT EXISTS turn_outcomes("
         "id INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -932,7 +932,7 @@ def _m22(conn):
 
 @migration(23)
 def _m23(conn):
-    """evolve item 4: self-improvement work items + the seeded-disabled
+    """self-improvement work items + the seeded-disabled
     evolve-detect gap detector (docs/EVOLVE.md)."""
     conn.execute(
         "CREATE TABLE IF NOT EXISTS evolve_items("
@@ -975,7 +975,7 @@ def _m23(conn):
 
 @migration(24)
 def _m24(conn):
-    """evolve item 5: append-only changelog + seeded-disabled weekly
+    """append-only changelog + seeded-disabled weekly
     evolve-digest (docs/EVOLVE.md)."""
     conn.execute(
         "CREATE TABLE IF NOT EXISTS evolve_changelog("
@@ -1006,7 +1006,7 @@ def _m24(conn):
 
 @migration(25)
 def _m25(conn):
-    """evolve item 7: seeded-disabled nightly evolve-reflect job —
+    """seeded-disabled nightly evolve-reflect job
     drafts pending lesson/skill items from the day, never applies
     (docs/EVOLVE.md)."""
     conn.execute(
@@ -1029,7 +1029,7 @@ def _m25(conn):
 
 @migration(26)
 def _m26(conn):
-    """evolve item 8: versioned skills + prompt snippets with
+    """versioned skills + prompt snippets with
     snapshot/restore (docs/EVOLVE.md)."""
     conn.execute(
         "CREATE TABLE IF NOT EXISTS skill_versions("
@@ -1058,7 +1058,7 @@ def _m26(conn):
 
 @migration(27)
 def _m27(conn):
-    """final-1 V1: per-turn and per-call timing metrics behind
+    """per-turn and per-call timing metrics behind
     `/call stats`. kind='turn' rows carry the stage timings; the single
     kind='call' row per call_id carries the receive counters, peak RSS
     and ffmpeg spawn count."""
@@ -1098,7 +1098,7 @@ def _m27(conn):
 
 @migration(28)
 def _m28(conn):
-    """final-1 P1: account-owner registry. Every connection carries
+    """account-owner registry. Every connection carries
     owner_kind 'owner'|'pal' — fail closed to 'owner'. Rows whose
     account label is 'pal' (the gmail@pal pattern) become pal-owned;
     everything else stays owner — unattended/background work may only
@@ -1115,7 +1115,7 @@ def _m28(conn):
 
 @migration(29)
 def _m29(conn):
-    """final-1 B1: budget ledger. (day Europe/London, scope, resource)
+    """budget ledger. (day Europe/London, scope, resource)
     rows accumulate charges; scope_limits holds the caps pa/budget
     writes at start-of-day (defaults when the owner hasn't tuned
     them). Reserved-but-unfinished work lives in 'reserved' until
@@ -1141,7 +1141,7 @@ def _m29(conn):
 
 @migration(30)
 def _m30(conn):
-    """final-2 G1/J1: standing goals, goal events and multi-day
+    """standing goals, goal events and multi-day
     projects, plus the seeded (disabled) proactive-tick job.
 
     - goals: owner-visible standing objectives pal works on read-only.
@@ -1218,7 +1218,7 @@ def _m30(conn):
 
 @migration(31)
 def _m31(conn):
-    """final-2 G3/T1/T2: the local activity feed, inbox-triage labels
+    """the local activity feed, inbox-triage labels
     and the seeded (disabled) cal-triage job.
 
     - activity: ONE row per thing pal noticed / drafted / needs a yes
@@ -1281,10 +1281,10 @@ def _m31(conn):
 
 @migration(32)
 def _m32(conn):
-    """final-2 M1: pinned memory blocks (MemGPT-style). One row per
+    """pinned memory blocks (MemGPT-style). One row per
     block — persona / human / goals / world — capped in pa.memblocks;
     memory_block_history keeps every previous version so edits are
-    auditable and revertible (/memory blocks, /memory undo in M2)."""
+    auditable and revertible (/memory blocks, /memory undo)."""
     conn.executescript("""
     CREATE TABLE memory_blocks(
       name TEXT PRIMARY KEY,
@@ -1307,7 +1307,7 @@ def _m32(conn):
 
 @migration(33)
 def _m33(conn):
-    """final-2 M3: cross-source recall — one FTS5 index over chat
+    """cross-source recall — one FTS5 index over chat
     turns, memories, owner facts, activity rows and vault note
     titles+excerpts (vault._secretish names never index). recall_meta
     is the incremental manifest: (source, ref_id, sha) so the seeded
@@ -1345,7 +1345,7 @@ def _m33(conn):
 
 @migration(34)
 def _m34(conn):
-    """final-2 M4: personal knowledge graph over the vault. Entities
+    """personal knowledge graph over the vault. Entities
     come from wikilinks/tags/frontmatter deterministically (and a
     budgeted model pass in pa.kg); edges are temporal Zep-style —
     a fact that stops being true gets valid_to set, never deleted,
@@ -1400,7 +1400,7 @@ def _m34(conn):
 
 @migration(35)
 def _m35(conn):
-    """final-3 X1: node registry + job ledger (docs/NODES.md).
+    """node registry + job ledger (docs/NODES.md).
 
     `nodes` caches each configured node's last /health: capabilities,
     battery/temp, breaker state. `node_jobs` is the durable record of
@@ -1444,7 +1444,7 @@ def _m35(conn):
 
 @migration(36)
 def _m36(conn):
-    """final-3 W1: file workspace (docs/WORKSPACE.md, pa/workspace.py).
+    """file workspace (docs/WORKSPACE.md, pa/workspace.py).
 
     One row per stored VERSION of a project file; bytes live under
     <PA_DATA_DIR>/workspace/<project>/.versions/. A tombstone row
@@ -1468,7 +1468,7 @@ def _m36(conn):
 
 @migration(37)
 def _m37(conn):
-    """final-3 K1: made tools (docs/TOOLMAKING.md, pa/madetools.py).
+    """made tools (docs/TOOLMAKING.md, pa/madetools.py).
 
     One row per registered VERSION of a generated tool; files live
     under <PA_DATA_DIR>/tools/ (never inside pa/). status is
@@ -1492,7 +1492,7 @@ def _m37(conn):
 
 @migration(38)
 def _m38(conn):
-    """final-3 S1: budgeted sub-agents (pa/subagents.py).
+    """budgeted sub-agents (pa/subagents.py).
 
     One row per delegated task: the task itself lives in `tasks`
     (state/deadline/result reuse the normal worker machinery); this
@@ -1515,7 +1515,7 @@ def _m38(conn):
 
 @migration(39)
 def _m39(conn):
-    """final-3 S2: research report jobs (pa/research.py).
+    """research report jobs (pa/research.py).
 
     The delegated task itself is an ordinary `tasks` row (created by
     subagents.delegate); this table links it to the report request so
@@ -1539,7 +1539,7 @@ def _m39(conn):
 
 @migration(40)
 def _m40(conn):
-    """final-4 E1: improvement archive (pa/evolve/archive.py).
+    """improvement archive (pa/evolve/archive.py).
 
     One row per VARIANT of an evolvable thing — a skill, a prompt
     snippet, a config kind, a made tool, a memory block. parent_id
@@ -1570,7 +1570,7 @@ def _m40(conn):
 
 @migration(41)
 def _m41(conn):
-    """final-4 R1: seeded-disabled weekly dr-check system job — runs
+    """seeded-disabled weekly dr-check system job — runs
     pa/drcheck.py (backup age, decrypt+test-restore, schema, env
     names, units, disk) and DMs only on red (docs/DR.md)."""
     conn.execute(
@@ -1591,7 +1591,7 @@ def _m41(conn):
 
 @migration(42)
 def _m42(conn):
-    """final-4 E5: provenance columns — every memory/fact/block/skill/
+    """provenance columns — every memory/fact/block/skill/
     KG edge records source (owner|pal|email|web|file|import) +
     source_ref, so untrusted text can't silently become durable state
     (docs/EVOLVE.md)."""
@@ -1611,7 +1611,7 @@ def _m42(conn):
 
 @migration(43)
 def _m43(conn):
-    """final-5 F1: seed the evolve-practice schedule DISABLED so a
+    """seed the evolve-practice schedule DISABLED so a
     fresh DB can `/jobs evolve-practice on` without first running
     `practice add` (the same INSERT OR IGNORE row pa/evolve/practice.py
     used to create lazily)."""
@@ -1631,7 +1631,7 @@ def _m43(conn):
 
 @migration(44)
 def _m44(conn):
-    """final-5 A2: seed the mail-inbound system job DISABLED — every
+    """seed the mail-inbound system job DISABLED — every
     5 min it polls pal's own Gmail for messages from the allowlisted
     owner (PA_OWNER_EMAIL + PA_MAIL_INBOUND_SENDERS) and enqueues each
     accepted one as an owner chat turn. PA_MAIL_INBOUND must also be
@@ -1656,7 +1656,7 @@ def _m44(conn):
 
 @migration(45)
 def _m45(conn):
-    """final-5 A3: seed the coursework deadline monitor DISABLED —
+    """seed the coursework deadline monitor DISABLED
     hourly read-only poll of Classroom/Docs assignments (PA_COURSEWORK
     + a connected toolkit) with 24h/2h notify() pings."""
     conn.execute(
@@ -1678,7 +1678,7 @@ def _m45(conn):
 
 @migration(46)
 def _m46(conn):
-    """final-5 A4: seed the notion-index system job DISABLED — hourly
+    """seed the notion-index system job DISABLED — hourly
     incremental read-only pull of the owner's Notion into recall FTS
     + the knowledge graph (PA_NOTION_INDEX + a 'notion' connection)."""
     conn.execute(

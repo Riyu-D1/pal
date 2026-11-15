@@ -1,4 +1,4 @@
-"""A1: one-time, expiring tokens for the HTTPS secret-capture form,
+"""one-time, expiring tokens for the HTTPS secret-capture form
 plus a short-lived "capture pending" flag for the Discord modal/DM
 flow.
 

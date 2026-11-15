@@ -1,4 +1,4 @@
-"""Item 13: audit-log writes + /audit command."""
+"""audit-log writes + /audit command."""
 
 import unittest
 

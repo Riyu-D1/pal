@@ -1,4 +1,4 @@
-"""evolve item 6 (docs/EVOLVE.md): capability requests — open or
+"""evolve (docs/EVOLVE.md): capability requests — open or
 dedupe an evolve_item for "I can't do X" and draft a short plan
 with ONE smart-tier call, budgeted by PA_EVOLVE_PLAN_CALLS per day.
 

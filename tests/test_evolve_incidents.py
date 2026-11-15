@@ -1,4 +1,4 @@
-"""Evolve item 1: incident table, record(), and the capture hooks.
+"""incident table, record(), and the capture hooks.
 
 Hooks are exercised with fake brains/providers — no network. The
 recorder itself must never change the turn's outcome.

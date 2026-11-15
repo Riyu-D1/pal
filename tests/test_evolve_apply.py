@@ -1,4 +1,4 @@
-"""Evolve item 10: Track A auto-apply with snapshot rollback."""
+"""Track A auto-apply with snapshot rollback."""
 
 import json
 import unittest

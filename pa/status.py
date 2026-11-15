@@ -120,7 +120,7 @@ def build(conn, s, env, probe=None) -> str:
         lines.append(f"• composio calls this month: "
                      f"{count}/~{s.composio_monthly_limit}")
 
-    # nodes (final-3): cached health only — /status must not block on
+    # nodes: cached health only — /status must not block on
     # a device that's asleep
     try:
         from . import nodes as nodesmod
@@ -150,7 +150,7 @@ def build(conn, s, env, probe=None) -> str:
                     f" {_clip(last['reply'] or '')[:80]}")
         lines.append(f"• {r['name']} [{state}]{tail}")
 
-    # final-2 G3: activity feed counts (PA_ACTIVITY)
+    # activity feed counts (PA_ACTIVITY)
     if getattr(s, "activity_feed", False):
         try:
             from . import activity as actmod

@@ -5,7 +5,7 @@ connected-app payloads, PDF text — is DATA, not instructions.
 `untrusted(source, text)` wraps it in an explicit fence the system
 prompt already teaches the model to never obey.
 
-final-1 P4: fencing also TAINTS the active tool context. The turn's
+fencing also TAINTS the active tool context. The turn's
 ctx is bound around each tool call; any fenced payload that flows
 through marks ctx.tainted (+ the first source seen), and
 pa/policy.decide upgrades every subsequent non-read action in that

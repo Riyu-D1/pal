@@ -1,4 +1,4 @@
-"""V5 streaming call brain: call-tier router, delta streaming,
+"""streaming call brain: call-tier router, delta streaming
 [[ASK_PAL]] escape, clause cutting, speaker reply_iter path."""
 import asyncio
 import threading

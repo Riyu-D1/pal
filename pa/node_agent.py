@@ -407,7 +407,7 @@ def cap_rss(args, job, state):
 
 
 def cap_run_tool(args, job, state):
-    """Run a pal-made tool (K1) in a subprocess with resource limits.
+    """Run a pal-made tool in a subprocess with resource limits.
     The tool file + manifest must already live under <data>/tools —
     file_put is the only way they get there, and its manifest must say
     node_ok."""

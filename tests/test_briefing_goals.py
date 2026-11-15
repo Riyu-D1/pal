@@ -1,4 +1,4 @@
-"""final-2 G5: the Goals section of the morning briefing — gated by
+"""the Goals section of the morning briefing — gated by
 PA_GOALS + PA_BRIEFING_GOALS, read-only."""
 
 import unittest

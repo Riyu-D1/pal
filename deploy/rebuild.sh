@@ -13,7 +13,7 @@ set -euo pipefail
 REPO_URL="${GIT_URL:-https://github.com/Riyu-D1/pal.git}"
 BRANCH="${PA_BRANCH:-main}"
 APP_DIR=/opt/pal
-ENV_DIR=/root/.pa
+ENV_FILE="$APP_DIR/.env"        # untracked + gitignored: survives pulls
 BACKUP_SRC="${1:?usage: rebuild.sh <encrypted-backup.enc>}"
 
 log() { printf '[rebuild] %s\n' "$*"; }
@@ -41,39 +41,45 @@ fi
 "$APP_DIR/.venv/bin/pip" install -q --upgrade pip
 "$APP_DIR/.venv/bin/pip" install -q -r "$APP_DIR/requirements.txt"
 
-log "env file (secrets come from $ENV_DIR/env — fill it yourself)"
-mkdir -p "$ENV_DIR"
-chmod 700 "$ENV_DIR"
-if [ ! -f "$ENV_DIR/env" ]; then
+log "creating pal system user"
+id -u pal >/dev/null 2>&1 || \
+  useradd --system --home-dir "$APP_DIR" --shell /usr/sbin/nologin pal
+
+log "env file (secrets come from $ENV_FILE — fill it yourself)"
+if [ ! -f "$ENV_FILE" ]; then
   sed 's/^# //' "$APP_DIR/.env.example" | grep -E '^PA_|^DISCORD|^GROQ|^GEMINI' \
-    > "$ENV_DIR/env" || true
-  chmod 600 "$ENV_DIR/env"
-  log "WROTE $ENV_DIR/env template — edit it BEFORE starting pal"
+    > "$ENV_FILE" || true
+  # units below run under system systemd — tell watchdog + /update
+  echo "PA_SYSTEMD_SCOPE=system" >> "$ENV_FILE"
+  chmod 600 "$ENV_FILE"
+  chown pal:pal "$ENV_FILE" 2>/dev/null || true
+  log "WROTE $ENV_FILE template — edit it BEFORE starting pal"
 fi
 
 log "restoring database from $BACKUP_SRC"
 # shellcheck disable=SC1091
-set -a; [ -f "$ENV_DIR/env" ] && . "$ENV_DIR/env"; set +a
+set -a; [ -f "$ENV_FILE" ] && . "$ENV_FILE"; set +a
 DATA_DIR="${PA_DATA_DIR:-/var/lib/pal}"
-mkdir -p "$DATA_DIR"
+mkdir -p "$DATA_DIR" "$APP_DIR/data"
+chown pal:pal "$DATA_DIR" "$APP_DIR/data"
 DB_PATH="${PA_DB:-$DATA_DIR/pa.sqlite3}"
 if [ ! -f "$DB_PATH" ]; then
   read -r -s -p "backup passphrase: " PA_BACKUP_PASSPHRASE </dev/tty || true
   echo
   PA_DATA_DIR="$DATA_DIR" "$APP_DIR/.venv/bin/python" -m pa import-backup \
-    --src "$BACKUP_SRC" <<<"$PA_BACKUP_PASSPHRASE" || {
+    "$BACKUP_SRC" <<<"$PA_BACKUP_PASSPHRASE" || {
       log "restore failed — check the passphrase"; exit 1; }
   unset PA_BACKUP_PASSPHRASE
 fi
 PA_DATA_DIR="$DATA_DIR" "$APP_DIR/.venv/bin/python" -m pa migrate
 
-log "systemd units"
-for unit in pa.service pa-watchdog.service; do
-  if [ -f "$APP_DIR/deploy/$unit" ]; then
-    sed "s|/opt/pal|$APP_DIR|g; s|/root/.pa|$ENV_DIR|g" \
-      "$APP_DIR/deploy/$unit" > "/etc/systemd/system/$unit"
-  fi
-done
+log "systemd units (system scope — matches PA_SYSTEMD_SCOPE=system)"
+sed -e "s|/home/pal/pal|$APP_DIR|g" \
+    -e "s|^ReadWritePaths=.*|ReadWritePaths=$APP_DIR/data $DATA_DIR|" \
+    "$APP_DIR/deploy/pa.service" > /etc/systemd/system/pa.service
+sed -e "s|/home/pal/pal|$APP_DIR|g" \
+    "$APP_DIR/deploy/pa-watchdog-system.service" \
+    > /etc/systemd/system/pa-watchdog.service
 systemctl daemon-reload
 systemctl enable pa.service >/dev/null 2>&1 || true
 

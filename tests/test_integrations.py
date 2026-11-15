@@ -1,4 +1,4 @@
-"""K2 acceptance: fixture-based build of a toy integration end to end
+"""acceptance: fixture-based build of a toy integration end to end
 — fake model output, fixture tests, owner approval, vault key,
 auth-injecting pinned fetch, owner/pal tagging."""
 

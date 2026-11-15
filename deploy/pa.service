@@ -1,4 +1,9 @@
-# Generic systemd unit for pal — web + worker + scheduler + Discord bot.
+# pal system unit — web + worker + scheduler + Discord bot.
+# ALTERNATIVE to the documented user-unit default (deploy/pa-user
+# .service): pick this for a dedicated system account + stronger
+# sandboxing, then set PA_SYSTEMD_SCOPE=system in .env so the watchdog
+# and /update call `systemctl restart pa` (PA_SYSTEMD_UNIT renames it).
+# Pair it with deploy/pa-watchdog-system.service, not the user one.
 # 1. cp deploy/pa.service /etc/systemd/system/pa.service
 # 2. edit User=, WorkingDirectory=, EnvironmentFile= below to your paths
 # 3. systemctl enable --now pa
@@ -12,7 +17,7 @@ Type=simple
 # ——— customise these three ———
 User=pal
 WorkingDirectory=/home/pal/pal
-EnvironmentFile=/home/pal/pal/.env
+EnvironmentFile=-/home/pal/pal/.env
 # ——————————————————————————
 ExecStart=/home/pal/pal/.venv/bin/python -m pa serve
 Restart=on-failure

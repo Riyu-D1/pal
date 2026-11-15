@@ -1,4 +1,4 @@
-"""final-2 J1: multi-day projects — start/status/stop tools, the
+"""multi-day projects — start/status/stop tools, the
 one-step-per-tick heartbeat, blocked -> ask card -> owner unblock,
 owner-write steps -> Approve cards, and replan-on-input-change."""
 

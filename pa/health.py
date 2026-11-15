@@ -1,4 +1,4 @@
-"""Deep /healthz (docs/EVOLVE.md item 3).
+"""Deep /healthz (docs/EVOLVE.md).
 
 Public and secret-free: short check codes only — never paths, env
 values, or stack detail. `ok` requires: the DB answers a read AND a

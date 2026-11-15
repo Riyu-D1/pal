@@ -1,4 +1,4 @@
-"""Evolve item 7: nightly reflection -> pending lesson/skill items."""
+"""nightly reflection -> pending lesson/skill items."""
 
 import unittest
 

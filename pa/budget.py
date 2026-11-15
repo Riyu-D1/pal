@@ -1,4 +1,4 @@
-"""final-1 B1: daily resource budgets — one ledger, pre-work checks.
+"""daily resource budgets — one ledger, pre-work checks.
 
 Keyed by (day in Europe/London, scope, resource). Scopes:
 'owner-chat', 'call', 'background', 'job:<name>', 'task:<id>'.
@@ -13,7 +13,7 @@ generously — degradation there is a softer reply, never a dead end.
 
 The ledger is the ONLY counter new callers should write; the older
 voice_usage / composio_usage tables keep working for their existing
-/status reads (B2 mirrors TTS chars here).
+/status reads (the ledger mirrors TTS chars here).
 """
 import os
 import re

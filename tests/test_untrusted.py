@@ -1,4 +1,4 @@
-"""Item 12: untrusted() fencing applied to all external-data paths."""
+"""untrusted() fencing applied to all external-data paths."""
 
 import unittest
 

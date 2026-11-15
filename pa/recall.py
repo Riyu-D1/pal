@@ -1,4 +1,4 @@
-"""final-2 M3: cross-source recall (PA_RECALL).
+"""cross-source recall (PA_RECALL).
 
 One FTS5 index (recall_fts, migration 33) over every local thing
 pal might want to remember: chat turns, memories, owner facts,
@@ -108,7 +108,7 @@ def reindex(conn, settings=None) -> dict:
                 (source, ref_id, cur.lastrowid, sha, now_iso()))
             out["added"] += 1
         # drop rows whose source vanished — notion rows are managed
-        # by notionindex's own cursor, not this sweep (final-5 A4)
+        # by notionindex's own cursor, not this sweep
         for key, m in meta.items():
             if key[0] == "notion":
                 continue

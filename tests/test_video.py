@@ -1,4 +1,4 @@
-"""Item 19: lightweight video understanding (off by default)."""
+"""lightweight video understanding (off by default)."""
 
 import os
 import unittest

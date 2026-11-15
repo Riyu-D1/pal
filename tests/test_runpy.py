@@ -1,4 +1,4 @@
-"""Item 17: restricted run_python."""
+"""restricted run_python."""
 
 import os
 import unittest

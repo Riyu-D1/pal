@@ -1,4 +1,4 @@
-"""final-2 G1: standing goals — schema, CRUD, the goal_* tools
+"""standing goals — schema, CRUD, the goal_* tools
 (owner-reviewed, allow-rule-able), the /goals card and the
 disabled-by-default proactive-tick seed."""
 

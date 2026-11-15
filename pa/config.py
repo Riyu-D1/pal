@@ -305,14 +305,14 @@ class Settings:
     router_fast_order: str = ""       # CSV; falls back to router_order
     router_smart_models: str = ""     # CSV name=model overrides
     router_fast_models: str = ""      # CSV name=model overrides
-    router_call_order: str = ""       # V5 CSV; falls back to router_order
-    router_call_models: str = ""      # V5 CSV name=model overrides
-    call_llm_seconds: float = 4.0     # V5 per-backend cap in a call turn
-    tts_chars_day: int = 0            # V7 global/day cap; 0 = per-provider
-    browser_owner_domains: str = ""   # P1 CSV domain=owner|pal map
-    policy_engine: bool = True        # P3 one approval floor; off = legacy
+    router_call_order: str = ""       # CSV; falls back to router_order
+    router_call_models: str = ""      # CSV name=model overrides
+    call_llm_seconds: float = 4.0     # per-backend cap in a call turn
+    tts_chars_day: int = 0            # global/day cap; 0 = per-provider
+    browser_owner_domains: str = ""   # CSV domain=owner|pal map
+    policy_engine: bool = True        # one approval floor; off = legacy
     policy_vault_unattended: bool = True  # vault writes stay unattended-free
-    tool_topk: int = 0                # L1: 0=off; >0 prunes the catalogue
+    tool_topk: int = 0                # 0=off; >0 prunes the catalogue
     router_call_seconds: int = 180    # whole-call deadline across backends
     router_backend_seconds: int = 60  # per-attempt cap inside the call
     # official-CLI session sidecars (loopback + bearer; see docs/ROUTER.md)
@@ -348,11 +348,11 @@ class Settings:
     shell_timeout: float = 15.0
     shell_output_cap: int = 8000
     approval_ttl_seconds: int = 24 * 3600
-    # inbound attachments (images/PDFs land in chat turns, item 3)
+    # inbound attachments (images/PDFs land in chat turns)
     attach_max_bytes: int = 8 * 1024 * 1024
     pdf_max_pages: int = 20
     pdf_max_chars: int = 50_000
-    # vision captions (item 4): off only if PA_VISION=false or no
+    # vision captions: off only if PA_VISION=false or no
     # backend key is configured at all
     vision: bool = True
     vision_order: str = "groq,gemini,cloudflare"
@@ -365,7 +365,7 @@ class Settings:
     telegram_enabled: bool = False
     telegram_chat_id: str = ""        # TELEGRAM_CHAT_ID (owner's chat)
     video_max_mb: int = 50
-    # memory (item 5): owner-fact writes always need approval;
+    # memory: owner-fact writes always need approval
     # PA_MEMORY_SAVE_APPROVAL also gates per-assistant memory_save;
     # PA_MEMORY_AUTO_PROPOSE lets a fast pass PROPOSE facts end-of-turn
     memory_save_approval: bool = False
@@ -388,11 +388,11 @@ class Settings:
     evolve_detect_threshold: int = 3
     evolve_detect_max_items: int = 3
     evolve_health_seconds: int = 60
-    # final-4 E1: versioned improvement archive — every skill/snippet/
+    # versioned improvement archive — every skill/snippet/
     # config/made-tool/memory-block change lands as a scored variant;
     # Track A promotes only candidates that beat live on the eval set.
     evolve_archive: bool = False
-    evolve_practice: bool = False    # PA_EVOLVE_PRACTICE (final-4 E4)
+    evolve_practice: bool = False    # PA_EVOLVE_PRACTICE
 
     # owner's Mac over SSH (tailscale); every mac command needs approval
     mac_ssh_host: str = ""
@@ -456,7 +456,7 @@ class Settings:
     # in-call TTS: ONE provider locked per call (separate from the
     # voice-note PA_TTS_ORDER); barge-in toggle; on-disk clip cache
     # for static lines (fillers) so they synthesise once ever
-    # V7: Gemini TTS is reserved for voice notes (it 429s under call
+    # Gemini TTS is reserved for voice notes (it 429s under call
     # load); calls default to azure -> cloudflare -> gemini.
     call_tts_order: str = "azure,cloudflare,gemini"
     call_barge_in: bool = True
@@ -468,14 +468,14 @@ class Settings:
     # fed with in-process PCM (gapless, zero ffmpeg at play time);
     # 'ffmpeg' = legacy per-clip FFmpegPCMAudio
     call_audio: str = "inproc"
-    # end-of-speech tails (V3): shorter = snappier answers; the longer
+    # end-of-speech tails: shorter = snappier answers; the longer
     # 'short' tail holds after brief bursts (owner probably mid-thought)
     call_tail_ms: int = 500
     call_tail_short_ms: int = 700
-    # call engine (V4): auto = Gemini Live first, pipeline fallback;
+    # call engine: auto = Gemini Live first, pipeline fallback
     # live = Live only; pipeline = STT->LLM->TTS chain only
     call_engine: str = "auto"
-    call_stream_brain: bool = True   # V5 streamed call-tier brain
+    call_stream_brain: bool = True   # streamed call-tier brain
     live_model: str = "gemini-3.1-flash-live-preview"
     live_voice: str = "Kore"
     live_budget: bool = False      # PA_LIVE_BUDGET — charge live_min
@@ -536,7 +536,7 @@ class Settings:
     workspace_mb: int = 500               # byte cap, all versions
     workspace_project: str = "main"       # default project name
 
-    # K1 tool making (docs/TOOLMAKING.md): pal generates+tests+
+    # tool making (docs/TOOLMAKING.md): pal generates+tests+
     # registers small pure-Python tools under <data>/tools/.
     # Off by default — the tool_* chat tools stay hidden.
     madetools: bool = False
@@ -633,6 +633,11 @@ class Settings:
     fetch_max_bytes: int = 5 * 1024 * 1024
     fetch_timeout_seconds: float = 10.0
     fetch_max_redirects: int = 3
+
+    # which systemd unit the watchdog + /update restart: user|system
+    # scope and the unit name. Defaults match deploy/pa-user.service.
+    systemd_scope: str = "user"
+    systemd_unit: str = "pa"
 
     fly_app_name: str = field(default="")
     container_bind: bool = False
@@ -1184,7 +1189,6 @@ def load_settings(env=None) -> Settings:
         env, "PA_LOGIN_MAX_FAILURES", s.login_max_failures)
     s.max_body_bytes = _int(env, "PA_MAX_BODY_BYTES", s.max_body_bytes)
 
-    # final-2
     s.goals = _bool(env, "PA_GOALS", s.goals)
     s.proactive = _bool(env, "PA_PROACTIVE", s.proactive)
     s.proactive_goal_tokens = _int(
@@ -1233,6 +1237,20 @@ def load_settings(env=None) -> Settings:
         env, "PA_FETCH_TIMEOUT_SECONDS", s.fetch_timeout_seconds)
     s.fetch_max_redirects = _int(
         env, "PA_FETCH_MAX_REDIRECTS", s.fetch_max_redirects)
+
+    s.systemd_scope = env.get(
+        "PA_SYSTEMD_SCOPE", s.systemd_scope).strip().lower() or \
+        s.systemd_scope
+    if s.systemd_scope not in ("user", "system"):
+        raise ConfigError(
+            f"PA_SYSTEMD_SCOPE must be user|system, got "
+            f"{s.systemd_scope!r}")
+    s.systemd_unit = env.get(
+        "PA_SYSTEMD_UNIT", s.systemd_unit).strip() or s.systemd_unit
+    if not re.fullmatch(r"[A-Za-z0-9_.@-]+", s.systemd_unit):
+        raise ConfigError(
+            f"PA_SYSTEMD_UNIT is not a valid unit name, got "
+            f"{s.systemd_unit!r}")
 
     s.fly_app_name = env.get("FLY_APP_NAME", "").strip()
     return s

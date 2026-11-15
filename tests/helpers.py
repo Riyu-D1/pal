@@ -469,6 +469,17 @@ class GWConn:
         except OSError:
             pass
 
+    def close(self, code=1000):
+        """A protocol-level close frame with a real close code (e.g.
+        Discord's 4004 'authentication failed')."""
+        import struct
+        try:
+            self.sock.sendall(encode_frame(
+                OP_CLOSE, struct.pack("!H", code), mask=False))
+        except OSError:
+            pass
+        self.drop()
+
 
 class FakeGateway:
     """Scripted Discord gateway. `scripts` is a list of callables, one

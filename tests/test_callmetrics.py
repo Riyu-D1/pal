@@ -1,4 +1,4 @@
-"""final-1 V1: call_metrics rows per turn + per call, and the
+"""call_metrics rows per turn + per call, and the
 `/call stats` rendering (zero rows and with data)."""
 
 import asyncio

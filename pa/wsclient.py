@@ -11,6 +11,7 @@ the same codec (server side: mask=False on send, expect masked recv).
 
 import base64
 import os
+import re
 import socket
 import ssl
 import struct
@@ -29,7 +30,10 @@ _GUIDE = b"258EAFA5-E914-47DA-95CA-C5AB0DC85B11"
 
 
 class WSError(Exception):
-    pass
+    def __init__(self, msg="", code=None):
+        super().__init__(msg)
+        self.code = code          # http status (handshake) or ws
+                                  # close code, when known
 
 
 class WSClosed(WSError):
@@ -136,8 +140,11 @@ class WSClient:
         status_line = head.split(b"\r\n", 1)[0]
         if b" 101" not in status_line:
             sock.close()
-            raise WSError(f"gateway handshake failed: "
-                          f"{status_line.decode('latin-1', 'replace')}")
+            m = re.search(rb"\s(\d{3})\s", status_line + b" ")
+            raise WSError(
+                f"gateway handshake failed: "
+                f"{status_line.decode('latin-1', 'replace')}",
+                code=int(m.group(1)) if m else None)
         import hashlib
         accept = base64.b64encode(hashlib.sha1(key.encode() + _GUIDE)
                                   .digest()).decode()
@@ -176,7 +183,12 @@ class WSClient:
             if op == OP_PONG:
                 continue
             if op == OP_CLOSE:
-                raise WSClosed("gateway sent close")
+                code = struct.unpack("!H", payload[:2])[0] \
+                    if len(payload) >= 2 else None
+                raise WSClosed(
+                    f"gateway sent close {code}"
+                    if code is not None else "gateway sent close",
+                    code=code)
             if op == OP_CONT:
                 if self._frag is None:
                     continue

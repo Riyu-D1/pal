@@ -1,0 +1,25 @@
+# pa watchdog — system-scope variant. Install ONLY alongside the
+# system pa.service (deploy/pa.service) with PA_SYSTEMD_SCOPE=system
+# in pal's .env, so `python -m pa watchdog` calls
+# `systemctl restart pa`. The user-scope unit
+# (deploy/pa-watchdog.service) is the documented default.
+#
+#   cp deploy/pa-watchdog-system.service /etc/systemd/system/pa-watchdog.service
+#   systemctl daemon-reload && systemctl enable --now pa-watchdog
+[Unit]
+Description=pal watchdog — restart pa when /healthz stays sick
+After=pa.service
+
+[Service]
+Type=simple
+# same paths/user as the system pa.service you installed
+User=pal
+WorkingDirectory=/home/pal/pal
+EnvironmentFile=-/home/pal/pal/.env
+ExecStart=/home/pal/pal/.venv/bin/python -m pa watchdog
+Restart=always
+RestartSec=10
+MemoryMax=128M
+
+[Install]
+WantedBy=multi-user.target

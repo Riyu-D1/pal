@@ -24,9 +24,18 @@ def probe_health(port: int) -> bool:
         return False
 
 
-def systemd_restart(runner) -> bool:
+def systemd_argv(scope: str = "user", unit: str = "pa") -> list:
+    """`systemctl [--user] restart <unit>` for the configured scope."""
+    argv = ["systemctl"]
+    if scope == "user":
+        argv.append("--user")
+    return argv + ["restart", unit]
+
+
+def systemd_restart(runner, scope: str = "user",
+                    unit: str = "pa") -> bool:
     try:
-        p = runner(["systemctl", "--user", "restart", "pa"],
+        p = runner(systemd_argv(scope, unit),
                    capture_output=True, text=True, timeout=60)
         return p.returncode == 0
     except Exception:
@@ -69,7 +78,9 @@ def loop(settings, env=None, probe=None, restart=None, notify=None,
     env = os.environ if env is None else env
     runner = runner or subprocess.run
     probe = probe or (lambda: probe_health(settings.port))
-    restart = restart or (lambda: systemd_restart(runner))
+    restart = restart or (lambda: systemd_restart(
+        runner, getattr(settings, "systemd_scope", "user"),
+        getattr(settings, "systemd_unit", "pa")))
 
     def _notify(text):
         record_incident(settings.db_path, text)

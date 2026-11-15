@@ -1,11 +1,12 @@
-"""S2 — research report sub-agent (docs/RESEARCH.md).
+"""research report sub-agent (docs/RESEARCH.md).
 
 `research(question, depth)` hands a structured prompt to a
-`researcher` sub-agent (S1 machinery — same tasks row, same budgets,
-same approvals floor). The child is told to end its summary with a
+`researcher` sub-agent (the sub-agent machinery — same tasks row,
+same budgets, same approvals floor). The child is told to end its
+summary with a
 fenced JSON block of {claims, sources}; when the task completes,
 tick_notifications calls finish() which shapes that into a Markdown
-report with numbered citations and writes it to the workspace (W1).
+report with numbered citations and writes it to the workspace.
 publish=True additionally queues a held page_publish action — owner
 approval, same as every publish.
 

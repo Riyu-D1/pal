@@ -178,7 +178,7 @@ DEFAULT_ESCALATE_ORDER = ["gemini-cli", "copilot-cli", "gemini-api",
 DEFAULT_FAST_ORDER = ["groq", "gemini-api", "openrouter-free",
                       "cloudflare", "gemini-cli", "copilot-cli",
                       "pollinations"]
-# V5: call tier — the spoken-turn brain. API backends only (no
+# call tier — the spoken-turn brain. API backends only (no
 # sidecar/CLI), tiny fast models, 4 s per attempt.
 DEFAULT_CALL_ORDER = ["groq", "gemini-api", "openrouter-free",
                       "cloudflare"]
@@ -539,7 +539,7 @@ class RouterProvider:
              timeout=None, tier=None, scope="owner-chat"):
         """One completion through the first healthy backend for `tier`.
 
-        B2: `scope` feeds the budget ledger — a background scope whose
+        `scope` feeds the budget ledger — a background scope whose
         daily share is spent degrades to the fast tier instead of
         burning smart/escalate quota; owner-chat never silently
         downgrades.
@@ -677,7 +677,7 @@ class RouterProvider:
 
     def chat_stream(self, messages, max_completion_tokens=256,
                     timeout=None):
-        """V5 call tier: yield content deltas from the first healthy
+        """call tier: yield content deltas from the first healthy
         `call`-tier backend, failing over between backends (never
         mid-stream). Per-backend cap is settings.call_llm_seconds
         (default 4 s); a backend without chat_iter falls back to a

@@ -1,4 +1,4 @@
-"""final-4 E3: anti-gaming rejection rules + digest surfacing."""
+"""anti-gaming rejection rules + digest surfacing."""
 
 import unittest
 from unittest import mock

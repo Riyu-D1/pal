@@ -1,4 +1,4 @@
-"""final-1 P2/P3: one action classifier + one decision floor for every
+"""one action classifier + one decision floor for every
 path that can act. classify() maps a tool call to an action_class;
 decide() maps (who owns the account, class, attended?, tainted?) to a
 verdict. The owner's rule is non-negotiable: writes/sends/deletes/
@@ -173,7 +173,7 @@ _OWNER_CHANNEL = frozenset({
 
 def _made_tool_class(conn, args) -> str:
     """tool_run's manifest-aware class: 'write' for pure tools,
-    'exec' for ones that may fetch — except K2 integration tools:
+    'exec' for ones that may fetch — except integration tools:
     read_only endpoints are reads (owner-tagged included), and a
     pal-tagged integration's writes are pal-owned writes. None =
     unknown tool, keep the verb-derived class."""
@@ -243,7 +243,7 @@ def decide(conn, tool: str, args: dict = None, *,
     # an untrusted tool can never relabel itself.
     cls = action_class or classify(tool, args, spec)
     if tool == "tool_run":
-        # K1: a registered pure tool is pal-owned write (the owner's
+        # a registered pure tool is pal-owned write (the owner's
         # approval already covered its code at registration); only a
         # manifest.network tool keeps exec's per-run approval.
         cls = _made_tool_class(conn, args) or cls
