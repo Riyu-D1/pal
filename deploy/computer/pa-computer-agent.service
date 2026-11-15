@@ -1,0 +1,29 @@
+# systemd USER unit for the computer-agent — install into
+# ~pa-browser/.config/systemd/user/ (install.sh templates the two
+# __PLACEHOLDER__s). Off until you `systemctl --user enable --now`.
+[Unit]
+Description=pal computer-agent (persistent Chromium + /desktop)
+After=network-online.target tailscaled.service
+Wants=tailscaled.service
+
+[Service]
+EnvironmentFile=%h/.pa-computer/env
+WorkingDirectory=__INSTALL_DIR__
+ExecStart=__INSTALL_DIR__/.venv/bin/python -m pa computer-agent
+Restart=on-failure
+RestartSec=5
+# the cgroup is the real cap: 3G on Ampere, 400M on the micro
+# fallback — a fat tab gets THIS unit killed, never pal. The
+# /desktop chain (Xvfb+x11vnc+websockify+headed Chromium) also runs
+# inside this cgroup when started through the agent.
+MemoryMax=__MEMORY_MAX__
+TasksMax=256
+PrivateTmp=true
+NoNewPrivileges=true
+# other homes are strictly off-limits (pal's ~/.pa/env lives in one);
+# its own home stays writable for the profile + downloads
+ProtectHome=read-only
+ReadWritePaths=%h
+
+[Install]
+WantedBy=default.target

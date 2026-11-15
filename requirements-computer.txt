@@ -1,0 +1,10 @@
+# Optional computer-use extras — ONLY needed on the computer host (the
+# Ampere A1 box), or on the pal host in the same-VM fallback. Never in
+# the base install: the service stays waitress+cryptography+tzdata.
+#
+#   pip install -r requirements-computer.txt
+#   playwright install chromium        # downloads the browser (~170MB)
+#
+# Tests and CI do NOT need this: pa/computer.py imports playwright
+# lazily and the suite uses a fake driver (tests/test_computer.py).
+playwright==1.53.0

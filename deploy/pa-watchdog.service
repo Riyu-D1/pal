@@ -1,0 +1,23 @@
+# pa watchdog — separate tiny supervisor for the main pa service.
+# Install (on the VM, NOT from CI):
+#   mkdir -p ~/.config/systemd/user
+#   cp deploy/pa-watchdog.service ~/.config/systemd/user/
+#   systemctl --user daemon-reload
+#   systemctl --user enable --now pa-watchdog
+# It polls http://127.0.0.1:$PA_PORT/healthz and restarts `pa` when
+# it stays sick; the owner gets one DM per outage window.
+[Unit]
+Description=pal watchdog — restart pa when /healthz stays sick
+After=pa.service
+
+[Service]
+Type=simple
+EnvironmentFile=%h/.pa/env
+ExecStart=/usr/bin/env python3 -m pa watchdog
+WorkingDirectory=%h/pa
+Restart=always
+RestartSec=10
+MemoryMax=128M
+
+[Install]
+WantedBy=default.target

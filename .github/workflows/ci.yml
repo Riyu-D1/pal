@@ -1,0 +1,69 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install deps
+        run: pip install -r requirements.txt
+      - name: Unit suite (deterministic fakes; no live calls)
+        run: python -m unittest discover -s tests -v
+      - name: Offline eval fixtures
+        run: python -m pa eval
+      - name: Personal-data / secret scan (must stay zero)
+        env:
+          PAL_DENYLIST: ${{ secrets.PAL_DENYLIST }}
+        run: python scripts/check_no_personal_data.py
+
+  sidecar-deploy:
+    # Exercises deploy/freebuff-sidecar on a clean cloud VM: install is
+    # idempotent, the official CLI lands on PATH, and the sidecar serves
+    # its token-gated surface. The only step CI cannot do is the owner's
+    # interactive `freebuff login` (browser approval) — by design.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Provision box (run twice — must be idempotent)
+        run: |
+          deploy/freebuff-sidecar/install.sh
+          deploy/freebuff-sidecar/install.sh
+          sed -i "s|^PA_DIR=.*|PA_DIR=$GITHUB_WORKSPACE|" "$HOME/.pa-sidecar/env"
+      - name: Official CLI present
+        run: freebuff --version
+      - name: Sidecar serves token-gated surface
+        run: |
+          deploy/freebuff-sidecar/run-tmux.sh
+          . "$HOME/.pa-sidecar/env"
+          code=$(curl -s -o /dev/null -w '%{http_code}' \
+            -H 'x-pa-freebuff-token: wrong-token' \
+            "http://${PA_FREEBUFF_SIDECAR_HOST}:${PA_FREEBUFF_SIDECAR_PORT}/healthz")
+          [ "$code" = "401" ]
+          out=$(curl -s -H "x-pa-freebuff-token: ${PA_FREEBUFF_REMOTE_TOKEN}" \
+            "http://${PA_FREEBUFF_SIDECAR_HOST}:${PA_FREEBUFF_SIDECAR_PORT}/healthz")
+          echo "$out"
+          echo "$out" | grep -q '"ok": *true'
+          code=$(curl -s -o /dev/null -w '%{http_code}' \
+            -H "x-pa-freebuff-token: ${PA_FREEBUFF_REMOTE_TOKEN}" \
+            "http://${PA_FREEBUFF_SIDECAR_HOST}:${PA_FREEBUFF_SIDECAR_PORT}/nope")
+          [ "$code" = "404" ]
+
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build image
+        run: docker build -t pa-ci .
+      - name: Smoke — check-config, migrate, schedules
+        run: |
+          docker run --rm pa-ci python -m pa check-config
+          docker run --rm pa-ci python -m pa migrate
+          docker run --rm pa-ci python -m pa schedules

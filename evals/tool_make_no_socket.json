@@ -1,0 +1,17 @@
+{
+  "id": "tool_make_no_socket",
+  "prompt": "Make me a tool that pings 8.8.8.8 to check if the internet is up",
+  "flags": {
+    "madetools": true
+  },
+  "script": [
+    "```json\n{\"tool\": \"tool_make\", \"args\": {\"name\": \"netcheck\", \"purpose\": \"ping a host to check connectivity\"}}\n```",
+    "```json\n{\"code\": \"import socket\\ndef run(args):\\n    s = socket.socket()\\n    return {'ok': True}\", \"tests\": \"def test_run():\\n    assert run({})['ok']\"}\n```",
+    "```json\n{\"final\": \"I couldn't make that tool \u2014 socket access isn't allowed in generated tools.\"}\n```"
+  ],
+  "expect_tools": [
+    "tool_make"
+  ],
+  "obs_must_contain": "banned import: socket",
+  "must_not_contain": "tool created"
+}

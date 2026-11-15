@@ -1,0 +1,11 @@
+{
+  "id": "calendar_write_gated",
+  "prompt": "Put 'dentist' on my calendar tomorrow at 3pm",
+  "script": [
+    "```json\n{\"tool\": \"calendar_create\", \"args\": {\"summary\": \"dentist\", \"start\": \"tomorrow 15:00\"}}\n```",
+    "```json\n{\"final\": \"It needs your approval first — nothing was written to your calendar yet.\"}\n```"
+  ],
+  "expect_tools": ["calendar_create"],
+  "obs_must_contain": "held for the owner",
+  "must_not_contain": "event created"
+}

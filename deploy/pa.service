@@ -1,0 +1,29 @@
+# Generic systemd unit for pal — web + worker + scheduler + Discord bot.
+# 1. cp deploy/pa.service /etc/systemd/system/pa.service
+# 2. edit User=, WorkingDirectory=, EnvironmentFile= below to your paths
+# 3. systemctl enable --now pa
+[Unit]
+Description=pal — self-hosted personal assistant
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+# ——— customise these three ———
+User=pal
+WorkingDirectory=/home/pal/pal
+EnvironmentFile=/home/pal/pal/.env
+# ——————————————————————————
+ExecStart=/home/pal/pal/.venv/bin/python -m pa serve
+Restart=on-failure
+RestartSec=5
+# pal binds loopback by default; the web UI is never internet-facing
+# without the documented tunnel/fly topology — see docs/SECURITY.md.
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=read-only
+ReadWritePaths=/home/pal/pal/data
+
+[Install]
+WantedBy=multi-user.target

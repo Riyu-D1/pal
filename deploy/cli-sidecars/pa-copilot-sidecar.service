@@ -1,0 +1,20 @@
+# systemd user unit — ~/.config/systemd/user/pa-copilot-sidecar.service
+# Serve the official GitHub Copilot CLI as a router session backend on
+# loopback. Prereqs:
+#   loginctl enable-linger "$USER"
+#   copilot installed + signed in once (see docs/ROUTER.md)
+#   PA_DIR + PA_COPILOT_CLI_TOKEN set in ~/.pa-sidecar/env
+#   systemctl --user daemon-reload
+#   systemctl --user enable --now pa-copilot-sidecar
+[Unit]
+Description=PA copilot-cli sidecar (copilot session provider for the router)
+After=network-online.target
+
+[Service]
+EnvironmentFile=%h/.pa-sidecar/env
+ExecStart=/usr/bin/env bash -lc 'cd "$PA_DIR" && exec python3 -m pa cli-sidecar copilot'
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target

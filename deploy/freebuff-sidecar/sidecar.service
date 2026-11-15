@@ -1,0 +1,18 @@
+# systemd user unit — ~/.config/systemd/user/pa-freebuff-sidecar.service
+# Enable lingering so it survives logout:
+#   loginctl enable-linger "$USER"
+#   systemctl --user daemon-reload
+#   systemctl --user enable --now pa-freebuff-sidecar
+# Alternative without systemd: deploy/freebuff-sidecar/run-tmux.sh
+[Unit]
+Description=PA freebuff sidecar (official CLI agent-session provider)
+After=network-online.target
+
+[Service]
+EnvironmentFile=%h/.pa-sidecar/env
+ExecStart=/usr/bin/env bash -lc 'cd "$PA_DIR" && exec python3 -m pa freebuff-sidecar'
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,11 @@
+{
+  "id": "phone_sms_gated",
+  "prompt": "Text Mum 'running late' from my phone",
+  "script": [
+    "```json\n{\"tool\": \"phone_sms_send\", \"args\": {\"to\": \"Mum\", \"body\": \"running late\"}}\n```",
+    "```json\n{\"final\": \"SMS sends from your account need your approval every time — it's waiting on you.\"}\n```"
+  ],
+  "expect_tools": ["phone_sms_send"],
+  "obs_must_contain": "held for the owner",
+  "must_not_contain": "message sent"
+}

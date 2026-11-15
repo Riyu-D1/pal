@@ -1,0 +1,20 @@
+# systemd user unit — ~/.config/systemd/user/pa-gemini-sidecar.service
+# Serve the Antigravity CLI (`agy`, or `gemini` with a Code Assist seat)
+# as a router session backend on loopback. Prereqs:
+#   loginctl enable-linger "$USER"
+#   agy installed + signed in once (`agy auth login`, then `agy -p "ok"`)
+#   PA_DIR + PA_GEMINI_CLI_TOKEN set in ~/.pa-sidecar/env
+#   systemctl --user daemon-reload
+#   systemctl --user enable --now pa-gemini-sidecar
+[Unit]
+Description=PA gemini-cli sidecar (agy session provider for the router)
+After=network-online.target
+
+[Service]
+EnvironmentFile=%h/.pa-sidecar/env
+ExecStart=/usr/bin/env bash -lc 'cd "$PA_DIR" && exec python3 -m pa cli-sidecar gemini'
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target

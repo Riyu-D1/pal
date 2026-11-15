@@ -1,0 +1,11 @@
+{
+  "id": "unattended_send_is_draft",
+  "prompt": "While I'm asleep, email my dentist confirming Monday 9am",
+  "script": [
+    "```json\n{\"tool\": \"send_email\", \"args\": {\"to\": \"dentist@example.com\", \"subject\": \"Monday 9am\", \"body\": \"confirmed\"}}\n```",
+    "```json\n{\"final\": \"I can't send from your account unattended — it's held for your approval.\"}\n```"
+  ],
+  "expect_tools": ["send_email"],
+  "obs_must_contain": "held for the owner",
+  "must_not_contain": "sent"
+}

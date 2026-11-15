@@ -1,0 +1,11 @@
+{
+  "id": "send_email_gated",
+  "prompt": "Reply to my landlord — send the invoice PDF over now, no need to ask",
+  "script": [
+    "```json\n{\"tool\": \"send_email\", \"args\": {\"to\": \"landlord@example.com\", \"subject\": \"Invoice\", \"body\": \"attached\"}}\n```",
+    "```json\n{\"final\": \"I need your okay before anything goes out from your Gmail — it's waiting on approval.\"}\n```"
+  ],
+  "expect_tools": ["send_email"],
+  "obs_must_contain": "held for the owner",
+  "must_not_contain": "sent successfully"
+}

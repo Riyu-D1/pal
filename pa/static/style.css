@@ -1,0 +1,153 @@
+/* pa — accessible, mobile-first styles (works at 375px) */
+:root {
+  --ink: #1b1f24;
+  --muted: #5c6670;
+  --line: #d3d9e0;
+  --bg: #f6f8fa;
+  --card: #ffffff;
+  --accent: #0b5bd3;
+  --danger: #b3261e;
+  --ok: #1a7f37;
+  --focus: #ffbf47;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial,
+    sans-serif;
+  color: var(--ink);
+  background: var(--bg);
+  line-height: 1.45;
+}
+main {
+  max-width: 46rem;
+  margin: 0 auto;
+  padding: 1rem;
+}
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .25rem .75rem;
+  align-items: center;
+  padding: .6rem 1rem;
+  background: var(--card);
+  border-bottom: 1px solid var(--line);
+}
+nav a, nav .link { color: var(--accent); }
+h1 { font-size: 1.5rem; margin: 1rem 0 .5rem; }
+h2 { font-size: 1.15rem; margin: 1.25rem 0 .5rem; }
+h3 { font-size: 1rem; }
+label { display: block; font-weight: 600; margin: .75rem 0 .2rem; }
+label.check { font-weight: 400; }
+input[type="text"], input:not([type]), input[type="password"],
+input[type="number"], textarea, select {
+  width: 100%;
+  max-width: 100%;
+  padding: .55rem .6rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font: inherit;
+  background: #fff;
+}
+input:focus-visible, textarea:focus-visible, select:focus-visible,
+button:focus-visible, a:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 1px;
+}
+button, .btn {
+  display: inline-block;
+  margin-top: .9rem;
+  padding: .55rem 1rem;
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  background: var(--accent);
+  color: #fff;
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+button.danger { background: #fff; color: var(--danger);
+  border-color: var(--danger); }
+button.link { background: none; border: none; color: var(--accent);
+  padding: 0; margin: 0; text-decoration: underline; }
+form.inline { display: inline; }
+form.inline button { margin-top: 0; }
+form.inline-edit { margin: .5rem 0; }
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: .9rem 1rem;
+  margin: .6rem 0;
+}
+ul.cards { list-style: none; padding: 0; }
+ul.tasks, ul.mems, ul.steps { list-style: none; padding: 0; }
+ul.tasks li, ul.steps li { padding: .4rem 0; border-bottom: 1px solid var(--line); }
+.banner {
+  padding: .7rem 1rem;
+  border-radius: 8px;
+  margin: .8rem 0;
+}
+.banner.error { background: #fdecea; border: 1px solid var(--danger);
+  color: #7a1d17; }
+.banner.info { background: #e8f1fd; border: 1px solid var(--accent); }
+.empty {
+  padding: 1rem;
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+  color: var(--muted);
+  margin: .6rem 0;
+}
+.muted { color: var(--muted); font-size: .9em; }
+.state {
+  display: inline-block;
+  padding: .05rem .5rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  font-size: .85em;
+}
+.state.succeeded { border-color: var(--ok); color: var(--ok); }
+.state.failed, .state.cancelled { border-color: var(--danger);
+  color: var(--danger); }
+.state.running { border-color: var(--accent); color: var(--accent); }
+.state.waiting_approval { border-color: #9a6700; color: #9a6700; }
+.step .seq { color: var(--muted); display: inline-block; width: 1.6em; }
+.step .detail { color: var(--muted); font-size: .85em;
+  word-break: break-word; }
+.step.done { opacity: .9; }
+.step.failed { border-left: 3px solid var(--danger); padding-left: .5rem; }
+.meter {
+  height: .6rem;
+  background: #e8ecf0;
+  border-radius: 999px;
+  overflow: hidden;
+  margin: .3rem 0;
+}
+.meter > div { height: 100%; background: var(--accent); }
+.unsupported { color: #9a6700; font-size: .85em; }
+blockquote {
+  margin: .4rem 0;
+  padding: .3rem .7rem;
+  border-left: 3px solid var(--line);
+  color: var(--muted);
+  font-size: .9em;
+  word-break: break-word;
+}
+code { background: #eef1f4; padding: .1rem .3rem; border-radius: 4px; }
+fieldset { border: 1px solid var(--line); border-radius: 8px;
+  margin-top: .8rem; }
+.actions { margin: .5rem 0; }
+@media (max-width: 480px) {
+  main { padding: .7rem; }
+  h1 { font-size: 1.3rem; }
+  button, .btn { width: 100%; text-align: center; }
+  form.inline button, form.inline-edit button { width: auto; }
+  nav { gap: .5rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
+table.kv { border-collapse: collapse; width: 100%; font-size: .92rem; }
+table.kv th { text-align: left; white-space: nowrap; padding: .2rem .8rem
+  .2rem 0; vertical-align: top; color: var(--muted); font-weight: 600; }
+table.kv td { padding: .2rem 0; }

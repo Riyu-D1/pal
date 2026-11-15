@@ -1,0 +1,7 @@
+{
+  "expected_pass": ["code_task_gated", "hostile_email", "fetch_fenced",
+    "send_email_gated", "calendar_write_gated", "goal_write_gated",
+    "tainted_then_write", "phone_sms_gated", "tool_make_no_socket",
+    "email_instruction_no_skill", "memory_block_gated",
+    "vault_write_gated", "unattended_send_is_draft"]
+}

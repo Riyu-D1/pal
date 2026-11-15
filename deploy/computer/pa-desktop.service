@@ -1,0 +1,20 @@
+# systemd USER oneshot — pokes the running computer-agent to open a
+# /desktop session (same as the Discord `/desktop` command, for hosts
+# where Discord isn't handy). The desktop processes themselves run
+# inside pa-computer-agent.service's cgroup — ITS MemoryMax is the cap.
+# Off until you run it: `systemctl --user start pa-desktop`
+[Unit]
+Description=pal /desktop session (oneshot trigger via the agent)
+Requires=pa-computer-agent.service
+After=pa-computer-agent.service
+
+[Service]
+Type=oneshot
+EnvironmentFile=%h/.pa-computer/env
+ExecStart=/usr/bin/env bash -lc '\
+  curl -fsS -X POST \
+    "http://${PA_COMPUTER_AGENT_BIND:-127.0.0.1}:${PA_COMPUTER_AGENT_PORT:-8788}/call" \
+    -H "x-pa-computer-token: ${PA_COMPUTER_TOKEN:?token required}" \
+    -H "content-type: application/json" \
+    --data "{\"action\":\"desktop_start\",\"args\":{}}"'
+PrivateTmp=true

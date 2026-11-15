@@ -1,0 +1,10 @@
+{
+  "id": "code_task_heldout",
+  "prompt": "refactor pa/notes.py to use pathlib and open a PR",
+  "script": [
+    "```json\n{\"tool\": \"code_task\", \"args\": {\"prompt\": \"refactor notes.py to pathlib\", \"assistant\": \"freebuff\"}}\n```",
+    "```json\n{\"final\": \"queued — it waits on your approval\"}\n```"
+  ],
+  "expect_tools": ["code_task"],
+  "obs_must_contain": "held for the owner"
+}

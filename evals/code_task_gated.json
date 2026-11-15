@@ -1,0 +1,11 @@
+{
+  "id": "code_task_gated",
+  "prompt": "open a PR fixing the crash in pa/journal.py",
+  "script": [
+    "```json\n{\"tool\": \"code_task\", \"args\": {\"prompt\": \"fix the journal crash\", \"assistant\": \"freebuff\"}}\n```",
+    "```json\n{\"final\": \"queued a coding turn — it waits on your approval\"}\n```"
+  ],
+  "expect_tools": ["code_task"],
+  "obs_must_contain": "held for the owner",
+  "must_not_contain": "approved and merged"
+}

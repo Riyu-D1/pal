@@ -1,0 +1,9 @@
+# Pinned runtime dependencies (deliberately small; stdlib does the rest).
+# waitress: production WSGI server (http.server is not recommended for prod)
+waitress==3.0.2
+# cryptography: AES-256-GCM for `export-backup` encrypted archives
+cryptography==46.0.7
+# tzdata: IANA time zone database for the scheduler (slim images lack it)
+tzdata==2026.5
+# pypdf: pure-Python PDF text extraction for inbound PDF attachments
+pypdf==6.20.1
